@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { Dog, Temperament } = require('../db')
+const { Op, Dog, Temperament } = require('../db')
 
 
 module.exports = {
@@ -12,14 +12,37 @@ module.exports = {
         for(let dog of dogs.data){
             arrayDogs.push({
                 id_dog: dog.id,
-                name: dog.name,
+                name: dog.name?.toLowerCase(),
                 height: dog.height.metric,
                 weight: dog.weight.metric,
                 life_span: dog.life_span,
-                temperament: dog.temperament,
+                temperament: dog.temperament?.toLowerCase(),
             });
         }
         return arrayDogs;
+    },
+
+    getDogsDB: async () => {
+            const dogsDB = await Dog.findAll();
+            return dogsDB;
+    },
+
+    getDogByIdDB: async (idDog) =>{
+        const dogDB = await Dog.findOne({
+            where: {
+                id: idDog,
+            }
+        });
+        return dogDB;
+    },
+
+    getDogsByNameDB: async(name) =>{
+        const dogsDB = await Dog.findAll({ 
+            where: { 
+                name: { [Op.like]:`%${name?.toLowerCase().trim()}%`}
+            } 
+        });
+        return dogsDB;
     },
 
     // Get all temperaments from the API
@@ -29,8 +52,7 @@ module.exports = {
         let idTemperaments=[];
 
         for(let dog of dogs.data){
-            // console.log(dog.temperament?.split(','));
-            let tempArray = dog.temperament?.split(',');
+            let tempArray = dog.temperament?.toLowerCase().split(',');
             if(tempArray?.length > 0){
                 for(let temp of tempArray) {
                     if(!arrayTemperaments.includes(temp.trim())){
@@ -46,9 +68,12 @@ module.exports = {
                 name: arrayTemperaments[i]
             });
         }
-        // console.log(arrayTemperaments);
-        // console.log(idTemperaments);
+        await Temperament.bulkCreate(idTemperaments);
         return idTemperaments;
     },
 
+    getTemperamentsDB: async () =>{
+        const dogsTemps = await Temperament.findAll();
+        return dogsTemps;
+    }
 }
