@@ -31,9 +31,9 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
     }, 
 
-    temperament: {
-        type: DataTypes.STRING,
-    }
+    // temperament: {
+    //     type: DataTypes.STRING,
+    // }
 
   },{});
 }

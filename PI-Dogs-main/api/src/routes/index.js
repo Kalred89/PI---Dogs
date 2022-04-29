@@ -39,7 +39,7 @@ router.get('/dogs/:idRaza', async(req,res,next) =>{
             if(dog.id_dog === idRaza) return res.json(dog);
         }
         return res.status(404).json({msg:'Such ID does not match with any dog in the DB'}); 
-            
+
     } catch (err) {
         next(err);
     }
@@ -53,31 +53,23 @@ router.get('/dogs', async (req, res,next) => {
         try {
             // Search on the API / Endpont allowed
             if(name === ' ') return res.status(404).json({msg:'Error: please insert a valid character'});
-        
-            const dogsList = await axios(`https://api.thedogapi.com/v1/breeds/search?q=${name?.toLowerCase().trim()}`);
-            if(dogsList.data.length > 0){
-                return res.send(dogsList.data)
-            }
+            const dogsList = await middleware.getDogsByName(name);
+            if(dogsList.length > 0) return res.send(dogsList)
             /////////////////////////////////////////////////////////////////////////////////
             // Search on my DB
             const dogsDB = await middleware.getDogsByNameDB(name);
             dogsDB.length > 0
             ? res.json(dogsDB)
             : res.status(404).json({msg:'Such a dog breed does not exist'});
-
         } catch (err) {
             next(err);
         }
-
     }else{
-
         try{
-
             const listDogsApi = await middleware.getDogs();
             const listDogsDB = await middleware.getDogsDB();
             const allDogs = listDogsApi.concat(listDogsDB);
             return res.status(201).json(allDogs)
-
         }catch(err){
             next(err);
         }
@@ -111,22 +103,38 @@ router.post('/dog', async (req,res,next) =>{
     if(typeof height !=='string') res.status(404).json({msg:'height needs to be a string'});
     if(typeof weight !=='string') res.status(404).json({msg:'weight needs to be a string'});
     if(typeof life_span !=='string') res.status(404).json({msg:'life_span needs to be a string'});
-    if(typeof temperament !=='string') res.status(404).json({msg:'temperament needs to be a string'});
+    if(!Array.isArray(temperament)) res.status(404).json({msg:'temperament needs to be an array'});
 
     //agregar que el temperamento exista en la base datos
     try {
-        //Should I check the API for this new dog's name as well?
+        const dogsList = await middleware.getDogsByName(name);
+
+        for(let dog of dogsList){
+            if(dog.name === name) return res.status(404).json({msg:'There already exists this race. The name of the race has to be unique'});
+        }
+
         const [dog, created] = await Dog.findOrCreate({
             where:{
                 name: name,
                 height: height ,
                 weight: weight,
                 life_span: life_span,
-                temperament: temperament
             }
         })
+
+        for(let temp of temperament){
+            const dogsTemps = await Temperament.findOne({
+                where:{
+                    name: temp
+                }
+            });
+            dog.addTemperament(dogsTemps);
+        }
+        // console.log(dog);
+        const dogByName = await middleware.getDogsByNameDB(name);
+        // console.log(dogByName)
         created
-        ? res.status(201).json(dog)
+        ? res.status(201).json(dogByName)
         : res.status(404).json({msg:'There already exists this race. The name of the race has to be unique'});
         
     } catch (err) {

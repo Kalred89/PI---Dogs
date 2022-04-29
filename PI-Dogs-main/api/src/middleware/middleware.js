@@ -36,11 +36,21 @@ module.exports = {
         return dogDB;
     },
 
+    getDogsByName: async(name) => {
+        const dogsList = await axios(`https://api.thedogapi.com/v1/breeds/search?q=${name?.toLowerCase().trim()}`);
+        return dogsList.data;
+    },
+
     getDogsByNameDB: async(name) =>{
         const dogsDB = await Dog.findAll({ 
             where: { 
-                name: { [Op.like]:`%${name?.toLowerCase().trim()}%`}
-            } 
+                name: { [Op.iLike]:`%${name?.toLowerCase().trim()}%`}
+            },
+            include: {
+                model: Temperament,
+                attributes: ["name", "id"],
+                through: {attributes:[]},
+            }
         });
         return dogsDB;
     },
