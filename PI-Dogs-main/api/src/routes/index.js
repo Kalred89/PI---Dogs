@@ -128,11 +128,10 @@ router.post('/dog', async (req,res,next) =>{
                     name: temp
                 }
             });
-            dog.addTemperament(dogsTemps);
+            await dog.addTemperament(dogsTemps);
         }
-        // console.log(dog);
         const dogByName = await middleware.getDogsByNameDB(name);
-        // console.log(dogByName)
+        
         created
         ? res.status(201).json(dogByName)
         : res.status(404).json({msg:'There already exists this race. The name of the race has to be unique'});

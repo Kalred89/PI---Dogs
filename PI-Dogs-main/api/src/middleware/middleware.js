@@ -49,7 +49,7 @@ module.exports = {
             include: {
                 model: Temperament,
                 attributes: ["name", "id"],
-                through: {attributes:[]},
+                through: { attributes: [] },
             }
         });
         return dogsDB;
