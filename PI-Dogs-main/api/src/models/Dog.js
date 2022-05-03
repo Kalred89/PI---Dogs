@@ -38,7 +38,6 @@ module.exports = (sequelize) => {
   },{});
 }
 
-
 // [ ] Raza con las siguientes propiedades:
 // ID *
 // Nombre *

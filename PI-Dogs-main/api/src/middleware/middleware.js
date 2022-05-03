@@ -11,7 +11,7 @@ module.exports = {
 
         for(let dog of dogs.data){
             arrayDogs.push({
-                id_dog: dog.id,
+                id: dog.id,
                 name: dog.name?.toLowerCase(),
                 height: dog.height.metric,
                 weight: dog.weight.metric,
