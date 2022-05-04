@@ -20,8 +20,7 @@ export default function DogCards() {
 
     async function handleSubmit(e){
         e.preventDefault()
-        // const data = await axios.get(`http://localhost:3001/dogs?name=${filter}`)
-        const data = getDogsByName(filter)
+        const data = await axios.get(`http://localhost:3001/dogs?name=${filter}`)
         setFilteredDogs(data.data)
     }
 
