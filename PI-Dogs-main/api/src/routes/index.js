@@ -51,10 +51,15 @@ router.get('/dogs', async (req, res,next) => {
     
     if(name){
         try {
-            // Search on the API / Endpont allowed
+            // Search on the API / Endpont allowed does not work, so I filter the dogs myself
             if(name === ' ') return res.status(404).json({msg:'Error: please insert a valid character'});
-            const dogsList = await middleware.getDogsByName(name);
-            if(dogsList.length > 0) return res.send(dogsList)
+            // const dogsList = await middleware.getDogsByName(name);
+            let dogsList = await middleware.getDogs();
+            let dogsListfiltered = dogsList.filter( (dog) => {
+                if(dog.name.includes(name?.toLowerCase().trim())) return dog;
+            } );
+            console.log(dogsListfiltered)
+            if(dogsList.length > 0) return res.send(dogsListfiltered)
             /////////////////////////////////////////////////////////////////////////////////
             // Search on my DB
             const dogsDB = await middleware.getDogsByNameDB(name);

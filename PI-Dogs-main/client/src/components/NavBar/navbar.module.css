@@ -1,0 +1,54 @@
+.navbar {
+    height: 56px;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background-color: #303236;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.navbar nav {
+    height: 100%;
+}
+
+.list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+    height: 100%;
+}
+
+.listItems {
+    margin: 0;
+    display: flex;
+    width: auto;
+    align-items: center;
+}
+
+.listItems a {
+    color: white;
+    padding: 16px 10px;
+    border-bottom: 4px solid transparent;
+}
+
+.listItems a:hover,
+.listItems a.active {
+    background-color: #808080;
+    color: white;
+}
+
+.search{
+    align-self: right;
+    padding: 6px;
+    border: none;
+    margin-top: 8px;
+    margin-right: 16px;
+    font-size: 17px;
+}

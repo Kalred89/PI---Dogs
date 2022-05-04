@@ -1,8 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit'
+import axios from 'axios';
 
 const initialState = {
     dogs: [],
     temperaments: [],
+    filteredDogs: [],
 }
 
 export const dogsSlice = createSlice({
@@ -10,26 +12,16 @@ export const dogsSlice = createSlice({
     initialState,
     reducers: {
 
-        loadDogs: (state, action) => {
+        setDogsList: (state, action) => {
             state.dogs = action.payload;
         },
-        
-        getDogsByName: (state, action) => {
-        // return async function (dispatch){
-        //     return await axios.get(`http://localhost:3001/dogs?name=${name}`)
-        //         .then(res => dispatch({type: GET_DOGS_BY_NAME, payload: res.data}))
-        // }
-        },
-        
-        getDogsById:(state, action) => {
-        // return async function (dispatch){
-        //     return await axios.get(`http://localhost:3001/dogs/${id}`)
-        //         .then(res => dispatch({type: GET_DOGS_BY_ID, payload: res.data}))
-        // }
-        },
-        
-        loadTemperaments:(state, action) => {
+
+        setTemperamentsList:(state, action) => {
             state.temperaments = action.payload;
+        },
+
+        setDogsByFilter: (state, action) => {
+            state.filteredDogs = action.payload;
         },
         
         createDog:(state, action) => {
@@ -40,6 +32,54 @@ export const dogsSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { loadDogs, loadTemperaments } = dogsSlice.actions
+export const { setDogsList, setTemperamentsList, setDogsByFilter } = dogsSlice.actions
 
 export default dogsSlice.reducer
+
+export const getAllDogs = () => {
+
+    return (dispatch) =>{
+        axios
+            .get('http://localhost:3001/dogs')
+            .then(response => {
+                dispatch(setDogsList(response.data));
+            })
+            .catch(error => console.log(error))
+    }
+}
+
+export const getAllTemperaments = () => {
+
+    return (dispatch) =>{
+        axios
+            .get('http://localhost:3001/temperament')
+            .then(response => {
+                dispatch(setTemperamentsList(response.data));
+            })
+            .catch(error => console.log(error))
+    }
+}
+
+export const getDogsByName = (name) => {
+
+    return (dispatch) =>{
+        axios
+            .get(`http://localhost:3001/dogs?name=${name}`)
+            .then(response => {
+                dispatch(setDogsByFilter(response.data));
+            })
+            .catch(error => console.log(error))
+    }
+}
+
+export const getDogsById = (id) => {
+
+    return (dispatch) =>{
+        axios
+            .get(`http://localhost:3001/dogs/${id}`)
+            .then(response => {
+                dispatch(setDogsByFilter(response.data));
+            })
+            .catch(error => console.log(error))
+    }
+}

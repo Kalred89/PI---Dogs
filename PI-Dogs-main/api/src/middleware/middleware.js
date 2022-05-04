@@ -17,6 +17,7 @@ module.exports = {
                 weight: dog.weight.metric,
                 life_span: dog.life_span,
                 temperament: dog.temperament?.toLowerCase(),
+                image: dog.image.url,
             });
         }
         return arrayDogs;
@@ -36,10 +37,11 @@ module.exports = {
         return dogDB;
     },
 
-    getDogsByName: async(name) => {
-        const dogsList = await axios(`https://api.thedogapi.com/v1/breeds/search?q=${name?.toLowerCase().trim()}`);
-        return dogsList.data;
-    },
+    // API endpoint does not work correctly, does not return all neccessary information, so I decided to filter the dogs myself in the route.
+    // getDogsByName: async(name) => {
+    //     // const dogsList = await axios(`https://api.thedogapi.com/v1/breeds/search?q=${name?.toLowerCase().trim()}`);
+    //     // return dogsList.data;
+    // },
 
     getDogsByNameDB: async(name) =>{
         const dogsDB = await Dog.findAll({ 
@@ -71,7 +73,8 @@ module.exports = {
                 }
             }
         }
-
+        arrayTemperaments.sort((a, b) => a.localeCompare(b))
+        
         for(let i =0; i < arrayTemperaments.length; i++){
             idTemperaments.push({
                 id: i+1,

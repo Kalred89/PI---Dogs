@@ -10,8 +10,11 @@ function App() {
         <Switch>
           
           <Route exact path='/'>
-            <h1>Henry Dogs</h1>
-            <LandingPage />
+            <div className="body">
+              <div className='landing'>
+                <LandingPage />
+              </div>
+            </div>         
           </Route>  
 
           <Route exact path='/home'>
