@@ -4,7 +4,6 @@ import axios from 'axios';
 const initialState = {
     dogs: [],
     temperaments: [],
-    filteredDogs: [],
 }
 
 export const dogsSlice = createSlice({
@@ -19,10 +18,6 @@ export const dogsSlice = createSlice({
         setTemperamentsList:(state, action) => {
             state.temperaments = action.payload;
         },
-
-        setDogsByFilter: (state, action) => {
-            state.filteredDogs = action.payload;
-        },
         
         createDog:(state, action) => {
             
@@ -32,7 +27,7 @@ export const dogsSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setDogsList, setTemperamentsList, setDogsByFilter } = dogsSlice.actions
+export const { setDogsList, setTemperamentsList } = dogsSlice.actions
 
 export default dogsSlice.reducer
 
@@ -60,26 +55,27 @@ export const getAllTemperaments = () => {
     }
 }
 
-export const getDogsByName = (name) => {
+export const filteredDogsTemperaments = (dogs) =>{
+    let arrayTemperaments= [];
+    let idTemperaments=[];
 
-    return (dispatch) =>{
-        axios
-            .get(`http://localhost:3001/dogs?name=${name}`)
-            .then(response => {
-                dispatch(setDogsByFilter(response.data));
-            })
-            .catch(error => console.log(error))
+    for(let dog of dogs){
+        let tempArray = dog.temperament?.split(',');
+        if(tempArray?.length > 0){
+            for(let temp of tempArray) {
+                if(!arrayTemperaments.includes(temp)){
+                    arrayTemperaments.push(temp); 
+                }    
+            }
+        }
     }
-}
+    arrayTemperaments.sort((a, b) => a.localeCompare(b))
 
-export const getDogsById = (id) => {
-
-    return (dispatch) =>{
-        axios
-            .get(`http://localhost:3001/dogs/${id}`)
-            .then(response => {
-                dispatch(setDogsByFilter(response.data));
-            })
-            .catch(error => console.log(error))
+    for(let i =0; i < arrayTemperaments.length; i++){
+        idTemperaments.push({
+            id: i+1,
+            name: arrayTemperaments[i]
+        });
     }
+    return idTemperaments;
 }

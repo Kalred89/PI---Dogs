@@ -58,7 +58,6 @@ router.get('/dogs', async (req, res,next) => {
             let dogsListfiltered = dogsList.filter( (dog) => {
                 if(dog.name.includes(name?.toLowerCase().trim())) return dog;
             } );
-            console.log(dogsListfiltered)
             if(dogsList.length > 0) return res.send(dogsListfiltered)
             /////////////////////////////////////////////////////////////////////////////////
             // Search on my DB
@@ -112,9 +111,13 @@ router.post('/dog', async (req,res,next) =>{
 
     //agregar que el temperamento exista en la base datos
     try {
-        const dogsList = await middleware.getDogsByName(name);
+        // const dogsList = await middleware.getDogsByName(name);
+        let dogsList = await middleware.getDogs();
+        let dogsListfiltered = dogsList.filter( (dog) => {
+            if(dog.name.includes(name?.toLowerCase().trim())) return dog;
+        } );
 
-        for(let dog of dogsList){
+        for(let dog of dogsListfiltered){
             if(dog.name === name) return res.status(404).json({msg:'There already exists this race. The name of the race has to be unique'});
         }
 

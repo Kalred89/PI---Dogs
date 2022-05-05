@@ -1,120 +1,167 @@
 import React from 'react';
 // import Style from '../DogCards/dogcards.module.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getAllDogs, getAllTemperaments, getDogsByName, getDogsById } from '../../Slice/docSlice';
-import axios from 'axios';
+import { getAllDogs, getAllTemperaments, filteredDogsTemperaments } from '../../Slice/docSlice';
 import './dogcards.css'
 
 export default function DogCards() {
-    const { dogs, temperaments,  } = useSelector((state) => state.dogsSlice);
-    const [filteredDogs, setFilteredDogs] = useState([])
-    const [filteredTemps, setFilteredTemps] = useState([])
-    const [filter, setFilter] = useState("")
+    const { dogs, temperaments } = useSelector((state) => state.dogsSlice);
+    const [filteredDogs, setFilteredDogs] = useState([]);
+    const inputRef= useRef();
+    const selectRef= useRef();
+    const selectDogRef= useRef();
+    const selectSort = useRef();
     const dispatch = useDispatch();
 
     useEffect(()=>{
         dispatch(getAllDogs());
         dispatch(getAllTemperaments())
-    },[dispatch])
+    },[dispatch,])
 
-    async function handleSubmit(e){
-        e.preventDefault()
-        const data = await axios.get(`http://localhost:3001/dogs?name=${filter}`)
-        setFilteredDogs(data.data)
+    function handleSubmit(e){
+        let filtered = dogs.filter( (dog) => dog.name.includes(e.target.value?.toLowerCase().trim()));
+        setFilteredDogs(filtered);
+        selectRef.current.value = "noTemp";  
     }
 
-    // function sortBy(sorting){
-    //     console.log(sorting);
-    //     switch(sorting){
+    function handleTemperament(e){
+        if (!filteredDogs.length){
+            let filtered = dogs.filter( (dog) => dog.temperament?.includes(e.target.value))
+            setFilteredDogs(filtered);    
+        } else {
+            setFilteredDogs(prev=> prev.filter ( (dog) => dog.temperament?.includes(e.target.value)))
+        }
+    }
 
-    //         case 'NameAZ':
-    //             dogs.sort((dogA, dogB) => dogA.name.localeCompare(dogB.name))
-    //             break;
-    //         case 'NameZA':
-    //             dogs.sort((dogA, dogB) => dogB.name.localeCompare(dogB.name))
-    //             break;
-    //         case 'WeightLH':
-    //             dogs.sort((dogA, dogB) => dogA.weight.localeCompare(dogB.weight))
-    //             break;
-    //         case 'WeightHL':
-    //             dogs.sort((dogA, dogB) => dogB.weight.localeCompare(dogA.weight))
-    //             break;
+    function handleClear(){
+        setFilteredDogs([]);
+        inputRef.current.value = "";
+        selectRef.current.value = "noTemp";
+        selectDogRef.current.value= "noBreed";
+        selectSort.current.value='NoSort';
+        
+    }
 
-    //         default: console.log("Sort by: not a valid sorting method");
-    //     }
+    const showDogs = filteredDogs.length ? filteredDogs : dogs
+    const showTemps = !filteredDogs.length ? temperaments : filteredDogsTemperaments(filteredDogs);
 
-    // }
+    function sortBy(sorting){
+        switch(sorting){
+            case 'NameAZ':
+                if (!filteredDogs.length){
+                    setFilteredDogs(dogs?.slice().sort((dogA, dogB) => {
+                        if (dogA.name < dogB.name) return -1;
+                        if (dogA.name > dogB.name) return 1;
+                        return 0; 
+                    })); 
+                }else{
+                    setFilteredDogs(prev=> prev?.slice().sort((dogA, dogB) => {
+                        if (dogA.name < dogB.name) return -1;
+                        if (dogA.name > dogB.name) return 1;
+                        return 0; 
+                    }));
+                } 
+                break;
+            case 'NameZA':
+                if (!filteredDogs.length){
+                    setFilteredDogs(dogs?.slice().sort((dogA, dogB) => {
+                        if (dogA.name > dogB.name) return -1;
+                        if (dogA.name < dogB.name) return 1;
+                        return 0; 
+                    })); 
+                }else{
+                    setFilteredDogs(prev=> prev?.slice().sort((dogA, dogB) => {
+                        if (dogA.name > dogB.name) return -1;
+                        if (dogA.name < dogB.name) return 1;
+                        return 0; 
+                    }));
+                } 
+                break;
+            case 'WeightLH':
+                if (!filteredDogs.length){
+                    setFilteredDogs(dogs?.slice().sort((dogA, dogB) => {
+                        if (dogA.weight < dogB.weight) return -1;
+                        if (dogA.weight > dogB.weight) return 1;
+                        return 0; 
+                    })); 
+                }else{
+                    setFilteredDogs(prev=> prev?.slice().sort((dogA, dogB) => {
+                        if (dogA.weight < dogB.name) return -1;
+                        if (dogA.weight > dogB.weight) return 1;
+                        return 0; 
+                    }));
+                } 
+                break;
+            case 'WeightHL':
+                if (!filteredDogs.length){
+                    setFilteredDogs(dogs?.slice().sort((dogA, dogB) => {
+                        if (dogA.weight > dogB.weight) return -1;
+                        if (dogA.weight < dogB.weight) return 1;
+                        return 0; 
+                    })); 
+                }else{
+                    setFilteredDogs(prev=> prev?.slice().sort((dogA, dogB) => {
+                        if (dogA.weight > dogB.name) return -1;
+                        if (dogA.weight < dogB.weight) return 1;
+                        return 0; 
+                    }));
+                } 
+                break;
+            default: console.log("Please, select a sorting method");
+        }
+
+    }
     return (
         <div>
-            <input type="text" placeholder='Buscar perros...' onChange={(e)=>setFilter(e.target.value)}></input>
-            <button onClick={e => handleSubmit(e)}>Buscar</button>
+            <label>Filter by name: </label>
+            <input type="text" placeholder='Buscar perros...' onChange={e => handleSubmit(e)} ref={inputRef}></input>
 
             <label>Filter by temperament: </label>
-            <select name="Temperaments" id="Temperaments" onChange={(e) => {
-                const temp = e.target.value;
-                setFilteredTemps(temp);
-            }}>
-                <option defaultValue='Select a temperament'>Select a temperament...</option>
+            <select name="Temperaments" id="Temperaments" onChange={e => handleTemperament(e)} ref={selectRef}>
+                <option value="noTemp">Select a temperament...</option>
                 {
-                    temperaments?.map(temp =>
+                    showTemps.map(temp =>
                         <option key={temp.id} value={temp.name}>{temp.name}</option>
                     )
+                
                 }
             </select>
 
             <label>Filter by breed: </label>
-            <select name="Breeds" id="Breeds" onChange={(e) => {
-                const breed = e.target.value;
-                setFilter(breed);
-                // CHECK THIS!!
-                handleSubmit()
-            }}>
-                <option defaultValue='Select a breed'>Select a breed...</option>
+            <select name="Breeds" id="Breeds" onChange={e => handleSubmit(e)} ref={selectDogRef}>
+                <option value="noBreed">Select a breed...</option>
                 {
-                    dogs?.map(dog =>
+                    showDogs?.map(dog =>
                         <option key={dog.id} value={dog.name}>{dog.name}</option>
                     )
                 }
             </select>
-            
 
-            {/* <label>Sort by: </label>
+            <label>Sort by: </label>
             <select name="Sort" id="Sort" onChange={(e) => {
                 sortBy(e?.target?.value);
-            }}>
-                <option defaultValue='Select a temperament'>Select an order...</option>
+            }} ref={selectSort}>
+                <option value='NoSort'>Select an sorting...</option>
                 <option value='NameAZ'>Name: A to Z</option>
                 <option value='NameZA'>Name: Z to A</option>
                 <option value='WeightLH'>Weight: Low to High</option>
                 <option value='WeightHL'>Weight: High to Low</option>
-            </select> */}
+            </select>
+
+            <button onClick={handleClear}>Clear all filters</button> 
             
-
-            {!filteredDogs.length && dogs?.filter((dog) =>{
-                    if(!filteredTemps) return dog
-                    else if(dog.temperament?.includes(filteredTemps)) return dog;
-                })
-                .map(dog => (
-                    <div key={dog.id} className='Card'>
-                        <img src={dog.image} alt={dog.name} className='Image'/>
-                        <p>Name: {dog.name}</p>
-                        <p>Weight: {dog.weight} kg.</p>
-                        <p>Temperament: {dog.temperament}</p>
-                    </div>     
-            ))}
-
-            {filteredDogs && filteredDogs.map(dog => (
-                <div key={dog.id} className='Card'>
-                    <img src={dog.image} alt={dog.name} />
-                    <p>Name: {dog.name}</p>
-                    <p>Weight: {dog.weight} kg.</p>
-                    <p>Temperament: {dog.temperament}</p>
-                    
-                </div>     
-            ))}
-
+            {showDogs
+                ?showDogs.map(dog => (
+                        <div key={dog.id} className='Card'>
+                            <img src={dog.image} alt={dog.name} className='Image'/>
+                            <p>Name: {dog.name}</p>
+                            <p>Weight: {dog.weight} kg.</p>
+                            <p>Temperament: {dog.temperament}</p>
+                        </div>  
+                ))
+                : <p>No dogs match filters</p>
+            }
         </div>
     )
 }
-
