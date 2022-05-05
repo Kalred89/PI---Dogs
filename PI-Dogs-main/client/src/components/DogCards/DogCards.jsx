@@ -3,9 +3,11 @@ import React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getAllDogs, getAllTemperaments, filteredDogsTemperaments } from '../../Slice/docSlice';
+import Pagination from '../Pagination/Pagination';
 import './dogcards.css'
 
 export default function DogCards() {
+    // Initial states and local states for filters
     const { dogs, temperaments } = useSelector((state) => state.dogsSlice);
     const [filteredDogs, setFilteredDogs] = useState([]);
     const inputRef= useRef();
@@ -13,18 +15,33 @@ export default function DogCards() {
     const selectDogRef= useRef();
     const selectSort = useRef();
     const dispatch = useDispatch();
+    const showDogs = filteredDogs.length ? filteredDogs : dogs
+    const showTemps = !filteredDogs.length ? temperaments : filteredDogsTemperaments(filteredDogs);
+    // Local states for pagination 
+    const [currentPage, setCurrentPage] = useState(1);
+    const [dogsPerPage, setDogsPerPage] = useState(8);
+    const indexOfLastDog = currentPage * dogsPerPage;
+    const indexOfFirstDog = indexOfLastDog - dogsPerPage;
+    const currentDogs = showDogs.slice(indexOfFirstDog,indexOfLastDog);
 
+    // Sets the initial states
     useEffect(()=>{
         dispatch(getAllDogs());
         dispatch(getAllTemperaments())
     },[dispatch,])
 
+    const pagination = (pageNumber) => {
+        setCurrentPage(pageNumber)
+    }
+
+    // Handles de input search of dogs by name
     function handleSubmit(e){
         let filtered = dogs.filter( (dog) => dog.name.includes(e.target.value?.toLowerCase().trim()));
         setFilteredDogs(filtered);
         selectRef.current.value = "noTemp";  
     }
 
+    // Handles de select search of temperaments 
     function handleTemperament(e){
         if (!filteredDogs.length){
             let filtered = dogs.filter( (dog) => dog.temperament?.includes(e.target.value))
@@ -34,19 +51,8 @@ export default function DogCards() {
         }
     }
 
-    function handleClear(){
-        setFilteredDogs([]);
-        inputRef.current.value = "";
-        selectRef.current.value = "noTemp";
-        selectDogRef.current.value= "noBreed";
-        selectSort.current.value='NoSort';
-        
-    }
-
-    const showDogs = filteredDogs.length ? filteredDogs : dogs
-    const showTemps = !filteredDogs.length ? temperaments : filteredDogsTemperaments(filteredDogs);
-
-    function sortBy(sorting){
+    // Handles the sorting options
+    function HandleSortBy(sorting){
         switch(sorting){
             case 'NameAZ':
                 if (!filteredDogs.length){
@@ -112,6 +118,19 @@ export default function DogCards() {
         }
 
     }
+
+    // Clears all the filters
+    function handleClear(){
+        setFilteredDogs([]);
+        inputRef.current.value = "";
+        selectRef.current.value = "noTemp";
+        selectDogRef.current.value= "noBreed";
+        selectSort.current.value='NoSort';
+        
+    }
+
+
+
     return (
         <div>
             <label>Filter by name: </label>
@@ -140,7 +159,7 @@ export default function DogCards() {
 
             <label>Sort by: </label>
             <select name="Sort" id="Sort" onChange={(e) => {
-                sortBy(e?.target?.value);
+                HandleSortBy(e?.target?.value);
             }} ref={selectSort}>
                 <option value='NoSort'>Select an sorting...</option>
                 <option value='NameAZ'>Name: A to Z</option>
@@ -151,17 +170,20 @@ export default function DogCards() {
 
             <button onClick={handleClear}>Clear all filters</button> 
             
-            {showDogs
-                ?showDogs.map(dog => (
-                        <div key={dog.id} className='Card'>
-                            <img src={dog.image} alt={dog.name} className='Image'/>
-                            <p>Name: {dog.name}</p>
-                            <p>Weight: {dog.weight} kg.</p>
-                            <p>Temperament: {dog.temperament}</p>
-                        </div>  
+            <Pagination dogsPerPage = {dogsPerPage} showDogs = {showDogs.length} pagination = {pagination}/>
+
+            {currentDogs.map(dog => (
+                <div key={dog.id} className='Card'>
+                    <img src={dog.image} alt={dog.name} className='Image'/>
+                    <p>Name: {dog.name}</p>
+                    <p>Weight: {dog.weight} kg.</p>
+                    <p>Temperament: {dog.temperament}</p>
+                </div>  
                 ))
-                : <p>No dogs match filters</p>
             }
+
+
+
         </div>
     )
 }
