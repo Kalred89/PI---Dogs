@@ -1,5 +1,5 @@
-/* .Card {
-    display: flex;
+.Card {
+    /* display: flex;
     flex-wrap: wrap;
     justify-content: center;
     background-color: aqua;
@@ -8,11 +8,14 @@
     border-radius: 5px;
     width: 50%;
     height: 50%;
-    justify-content: space-between;
+    justify-content: space-between; */
+    border: black solid;
+    padding: 20px;
+    margin: 20px;
 }
 
 .Image{
-    max-height: 50%;
-    max-width: 50%;
+    /* max-height: 50%;
+    max-width: 50%; */
     border-radius: 5px 5px 0 0;
-} */
+}

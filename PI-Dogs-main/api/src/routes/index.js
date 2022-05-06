@@ -36,7 +36,7 @@ router.get('/dogs/:idRaza', async(req,res,next) =>{
         const listDogs = await middleware.getDogs();
         
         for(let dog of listDogs){
-            if(dog.id_dog === idRaza) return res.json(dog);
+            if(dog.id === idRaza) return res.json(dog);
         }
         return res.status(404).json({msg:'Such ID does not match with any dog in the DB'}); 
 

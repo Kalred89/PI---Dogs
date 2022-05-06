@@ -4,6 +4,8 @@ import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getAllDogs, getAllTemperaments, filteredDogsTemperaments } from '../../Slice/docSlice';
 import Pagination from '../Pagination/Pagination';
+import DogCard from '../DogCard/DogCard';
+import { Link } from 'react-router-dom';
 import './dogcards.css'
 
 export default function DogCards() {
@@ -23,7 +25,6 @@ export default function DogCards() {
     const indexOfLastDog = currentPage * dogsPerPage;
     const indexOfFirstDog = indexOfLastDog - dogsPerPage;
     const currentDogs = showDogs.slice(indexOfFirstDog,indexOfLastDog);
-
     // Sets the initial states
     useEffect(()=>{
         dispatch(getAllDogs());
@@ -33,14 +34,12 @@ export default function DogCards() {
     const pagination = (pageNumber) => {
         setCurrentPage(pageNumber)
     }
-
     // Handles de input search of dogs by name
     function handleSubmit(e){
         let filtered = dogs.filter( (dog) => dog.name.includes(e.target.value?.toLowerCase().trim()));
         setFilteredDogs(filtered);
         selectRef.current.value = "noTemp";  
     }
-
     // Handles de select search of temperaments 
     function handleTemperament(e){
         if (!filteredDogs.length){
@@ -50,7 +49,6 @@ export default function DogCards() {
             setFilteredDogs(prev=> prev.filter ( (dog) => dog.temperament?.includes(e.target.value)))
         }
     }
-
     // Handles the sorting options
     function HandleSortBy(sorting){
         switch(sorting){
@@ -93,7 +91,7 @@ export default function DogCards() {
                     })); 
                 }else{
                     setFilteredDogs(prev=> prev?.slice().sort((dogA, dogB) => {
-                        if (dogA.weight < dogB.name) return -1;
+                        if (dogA.weight < dogB.weight) return -1;
                         if (dogA.weight > dogB.weight) return 1;
                         return 0; 
                     }));
@@ -108,7 +106,7 @@ export default function DogCards() {
                     })); 
                 }else{
                     setFilteredDogs(prev=> prev?.slice().sort((dogA, dogB) => {
-                        if (dogA.weight > dogB.name) return -1;
+                        if (dogA.weight > dogB.weight) return -1;
                         if (dogA.weight < dogB.weight) return 1;
                         return 0; 
                     }));
@@ -118,18 +116,14 @@ export default function DogCards() {
         }
 
     }
-
     // Clears all the filters
     function handleClear(){
         setFilteredDogs([]);
         inputRef.current.value = "";
         selectRef.current.value = "noTemp";
         selectDogRef.current.value= "noBreed";
-        selectSort.current.value='NoSort';
-        
+        selectSort.current.value='NoSort';      
     }
-
-
 
     return (
         <div>
@@ -138,7 +132,7 @@ export default function DogCards() {
 
             <label>Filter by temperament: </label>
             <select name="Temperaments" id="Temperaments" onChange={e => handleTemperament(e)} ref={selectRef}>
-                <option value="noTemp">Select a temperament...</option>
+                <option key={0} value="noTemp">Select a temperament...</option>
                 {
                     showTemps.map(temp =>
                         <option key={temp.id} value={temp.name}>{temp.name}</option>
@@ -149,7 +143,7 @@ export default function DogCards() {
 
             <label>Filter by breed: </label>
             <select name="Breeds" id="Breeds" onChange={e => handleSubmit(e)} ref={selectDogRef}>
-                <option value="noBreed">Select a breed...</option>
+                <option key={0} value="noBreed">Select a breed...</option>
                 {
                     showDogs?.map(dog =>
                         <option key={dog.id} value={dog.name}>{dog.name}</option>
@@ -159,31 +153,25 @@ export default function DogCards() {
 
             <label>Sort by: </label>
             <select name="Sort" id="Sort" onChange={(e) => {
-                HandleSortBy(e?.target?.value);
+                HandleSortBy(e.target.value);
             }} ref={selectSort}>
-                <option value='NoSort'>Select an sorting...</option>
-                <option value='NameAZ'>Name: A to Z</option>
-                <option value='NameZA'>Name: Z to A</option>
-                <option value='WeightLH'>Weight: Low to High</option>
-                <option value='WeightHL'>Weight: High to Low</option>
+                <option key={0} value='NoSort'>Select an sorting...</option>
+                <option key={1} value='NameAZ'>Name: A to Z</option>
+                <option key={2} value='NameZA'>Name: Z to A</option>
+                <option key={3} value='WeightLH'>Weight: Low to High</option>
+                <option key={4} value='WeightHL'>Weight: High to Low</option>
             </select>
 
             <button onClick={handleClear}>Clear all filters</button> 
             
             <Pagination dogsPerPage = {dogsPerPage} showDogs = {showDogs.length} pagination = {pagination}/>
-
             {currentDogs.map(dog => (
-                <div key={dog.id} className='Card'>
-                    <img src={dog.image} alt={dog.name} className='Image'/>
-                    <p>Name: {dog.name}</p>
-                    <p>Weight: {dog.weight} kg.</p>
-                    <p>Temperament: {dog.temperament}</p>
-                </div>  
+                <Link to={`/dogs/${dog.id}`}>
+                    <DogCard key={dog.id} id={dog.id} name={dog.name} image={dog.image} weight={dog.weight} temperament={dog.temperament}/>
+                </Link>
                 ))
             }
-
-
-
+            <Pagination dogsPerPage = {dogsPerPage} showDogs = {showDogs.length} pagination = {pagination}/>
         </div>
     )
 }
