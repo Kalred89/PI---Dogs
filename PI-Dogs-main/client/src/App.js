@@ -3,7 +3,7 @@ import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import Home from './components/Home';
 import LandingPage from './components/LandingPage/LandingPage';
 import Details from './components/DogDetail/DogDetail';
-import dogCreation from './components/DogCreation/DogCreation';
+import DogCreation from './components/DogCreation/DogCreation';
 
 function App() {
   return (
@@ -20,7 +20,7 @@ function App() {
 
           <Route exact path='/home' component={Home}/>
           <Route exact path='/dogs/:id' component={Details}/>
-          <Route exact path='/createDog' component={dogCreation}/>
+          <Route exact path='/createDog' component={DogCreation}/>
         </Switch>
 
       </div>

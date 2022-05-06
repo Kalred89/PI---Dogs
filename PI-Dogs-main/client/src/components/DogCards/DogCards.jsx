@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 // import Style from '../DogCards/dogcards.module.css';
 import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -29,7 +29,7 @@ export default function DogCards() {
     useEffect(()=>{
         dispatch(getAllDogs());
         dispatch(getAllTemperaments())
-    },[dispatch,])
+    },[dispatch])
 
     const pagination = (pageNumber) => {
         setCurrentPage(pageNumber)

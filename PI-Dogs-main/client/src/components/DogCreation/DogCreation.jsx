@@ -1,18 +1,67 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { postNewDog, getAllTemperaments, getAllDogs } from "../../Slice/docSlice";
 
+export default function DogCreation (){
+    const dispatch = useDispatch();
+    const { dogs, temperaments } = useSelector((state) => state.dogsSlice);
+    const [input, setInput] = useState({
+        name: '',
+        height: '',
+        heightMin: '',
+        heightMax: '',
+        weight: '',
+        weightMin: '',
+        weightMax: '',
+        life_span: '',
+        temperament: [],
+        image: ''
+    })
 
-export default function dogCreation (){
+    useEffect(()=>{
+        dispatch(getAllTemperaments())
+        dispatch(getAllDogs());
+    },[dispatch])
 
+    function handleSubmit (e){
+        e.preventDefault();
+        input.height = `${input.heightMin} - ${input.heightMax}` ;
+        input.weight = `${input.weightMin} - ${input.weightMax}` ;
+        console.log('input:', input);
+        dispatch(postNewDog(input));
+        setInput({
+            name: '',
+            height: '',
+            heightMin: '',
+            heightMax: '',
+            weight: '',
+            weightMin: '',
+            weightMax: '',
+            life_span: '',
+            temperament: [],
+            image: ''
+        })
+    }
 
+    function handleInputChange(e){ 
+        setInput(
+            {...input, [e.target.name]: e.target.value}
+        );  
+    }
 
+    function handleTemperament(){
+
+    }
+
+    console.log(dogs.length);
+    console.log(dogs);
     return (
         <div>
-            <Link to='/home'>
-                <button>Go back</button>
-            </Link>
+            <Link to='/home'><button>Go back</button></Link>
             <h1>Complete the form below to create your own new dog breed!</h1>
-            <form onSubmit=''>
+            <form onSubmit={(e) => handleSubmit(e)}>
                 <br/>
                 <hr />
                 <br />
@@ -22,29 +71,29 @@ export default function dogCreation (){
                         type="text" 
                         name='name' 
                         placeholder='Enter a name for your new dog...' 
-                        value={''}
-                        onChange={''}
+                        value={input.name}
+                        onChange={handleInputChange}
                     />
                 </div>
                 <br/>
                 <hr />
                 <br />
-                {/* <div>
+                <div>
                     <label>Height - Min & Max </label>
                     <input className={''}
                         type="text" 
-                        name='height-min' 
+                        name='heightMin' 
                         placeholder='Enter MINIMUM height in cm...' 
-                        value={''}
-                        onChange={''}
+                        value={input.heightMin}
+                        onChange={handleInputChange}
                     />
                     <label> - </label>
                     <input className={''}
                         type="text" 
-                        name='height-max' 
+                        name='heightMax' 
                         placeholder='Enter MAXIMUM height in cm...' 
-                        value={''}
-                        onChange={''}
+                        value={input.heightMax}
+                        onChange={handleInputChange}
                     />
                     <label> Cm</label>
                 </div>
@@ -55,18 +104,18 @@ export default function dogCreation (){
                     <label>Weight - Min & Max </label>
                     <input className={''}
                         type="text" 
-                        name='weight-min' 
+                        name='weightMin' 
                         placeholder='Enter MINIMUM weight in cm...' 
-                        value={''}
-                        onChange={''}
+                        value={input.weightMin}
+                        onChange={handleInputChange}
                     />
                     <label> - </label>
                     <input className={''}
                         type="text" 
-                        name='weight-max' 
+                        name='weightMax' 
                         placeholder='Enter MAXIMUM weight in cm...' 
-                        value={''}
-                        onChange={''}
+                        value={input.weightMax}
+                        onChange={handleInputChange}
                     />
                     <label> kg</label>
                 </div>
@@ -79,8 +128,8 @@ export default function dogCreation (){
                         type="text" 
                         name='life_span' 
                         placeholder='Enter life expectency in years...' 
-                        value={''}
-                        onChange={''}
+                        value={input.life_span}
+                        onChange={handleInputChange}
                     />
                     <label> Years</label>
                 </div>
@@ -89,21 +138,24 @@ export default function dogCreation (){
                 <br />
                 <div>
                     <label>Select temperaments: </label>
-                    <select>
+                    <select onChange={e => handleTemperament(e)}>
                         <option key={0} value="noTemp">Select a temperament...</option>
+                        {
+                        temperaments.map(temp =>
+                        <option key={temp.id} value={temp.name}>{temp.name}</option> )}
                     </select>
                 </div>
                 <br/>
                 <hr />
                 <br />
-                <div>
+                {/* <div>
                     <label>Image: </label>
                     <input className={''}
                         type="file" 
                         name='image' 
                         placeholder='Add an image to your new dog' 
                         value={''}
-                        onChange={''}
+                        onChange={handleInputChange}
                     />
                 </div>
                 <br/>

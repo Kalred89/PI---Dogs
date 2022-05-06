@@ -26,9 +26,7 @@ export default function Details (props){
             </div>
             :  <p>Loading...</p>     
             }
-            <Link to='/home'>
-                <button>Go back</button>
-            </Link>
+            <Link to='/home'><button>Go back</button></Link>
         </div>
     )
 }

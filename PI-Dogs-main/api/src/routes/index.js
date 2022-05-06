@@ -102,7 +102,8 @@ router.post('/dog', async (req,res,next) =>{
 
     const {name , height, weight, life_span, temperament} = req.body;
 
-    if(!name || !height || !weight) res.status(404).json({msg:'Mandatory fields incomplete'});
+    // if(!name || !height || !weight) res.status(404).json({msg:'Mandatory fields incomplete'});
+    if(!name) res.status(404).json({msg:'Please add a name'});
     if(typeof name !=='string') res.status(404).json({msg:'Name needs to be a string'});
     if(typeof height !=='string') res.status(404).json({msg:'height needs to be a string'});
     if(typeof weight !=='string') res.status(404).json({msg:'weight needs to be a string'});
