@@ -10,8 +10,7 @@ export default function NavBar() {
                     <li className={Style.listItems}>
                         <NavLink exact to="/" >Landing Page</NavLink>
                         <NavLink exact to="/home" >Home</NavLink>
-                        <NavLink to="/Create a Dog" >Create a Dog</NavLink>
-                        <NavLink to="/about" >About</NavLink>    
+                        <NavLink to="/CreateDog" >Create a Dog</NavLink>  
                     </li>
                 </ul>        
             </nav>
