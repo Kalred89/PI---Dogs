@@ -166,7 +166,7 @@ export default function DogCards() {
             
             <Pagination dogsPerPage = {dogsPerPage} showDogs = {showDogs.length} pagination = {pagination}/>
             {currentDogs.map(dog => (
-                <Link to={`/dogs/${dog.id}`}>
+                <Link key={dog.id} to={`/dogs/${dog.id}`}>
                     <DogCard key={dog.id} id={dog.id} name={dog.name} image={dog.image} weight={dog.weight} temperament={dog.temperament}/>
                 </Link>
                 ))
