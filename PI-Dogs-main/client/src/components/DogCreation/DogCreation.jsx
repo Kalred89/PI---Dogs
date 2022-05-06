@@ -1,11 +1,13 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { postNewDog, getAllTemperaments, getAllDogs } from "../../Slice/docSlice";
 
 export default function DogCreation (){
     const dispatch = useDispatch();
+    const history = useHistory();
+    const selectRef= useRef();
     const { dogs, temperaments } = useSelector((state) => state.dogsSlice);
     const [input, setInput] = useState({
         name: '',
@@ -30,7 +32,7 @@ export default function DogCreation (){
         input.height = `${input.heightMin} - ${input.heightMax}` ;
         input.weight = `${input.weightMin} - ${input.weightMax}` ;
         console.log('input:', input);
-        dispatch(postNewDog(input));
+        // dispatch(postNewDog(input));
         setInput({
             name: '',
             height: '',
@@ -43,7 +45,10 @@ export default function DogCreation (){
             temperament: [],
             image: ''
         })
+        selectRef.current.value = 0;
+        // history.push('/home');
     }
+
 
     function handleInputChange(e){ 
         setInput(
@@ -51,12 +56,14 @@ export default function DogCreation (){
         );  
     }
 
-    function handleTemperament(){
-
+    function handleTemperament(e){
+        setInput({
+            ...input, temperament: [...input.temperament, e.target.value]
+        });  
     }
 
-    console.log(dogs.length);
-    console.log(dogs);
+    // console.log(dogs.length);
+    // console.log(dogs);
     return (
         <div>
             <Link to='/home'><button>Go back</button></Link>
@@ -72,7 +79,7 @@ export default function DogCreation (){
                         name='name' 
                         placeholder='Enter a name for your new dog...' 
                         value={input.name}
-                        onChange={handleInputChange}
+                        onChange={(e) => handleInputChange(e)}
                     />
                 </div>
                 <br/>
@@ -85,7 +92,7 @@ export default function DogCreation (){
                         name='heightMin' 
                         placeholder='Enter MINIMUM height in cm...' 
                         value={input.heightMin}
-                        onChange={handleInputChange}
+                        onChange={(e) => handleInputChange(e)}
                     />
                     <label> - </label>
                     <input className={''}
@@ -93,7 +100,7 @@ export default function DogCreation (){
                         name='heightMax' 
                         placeholder='Enter MAXIMUM height in cm...' 
                         value={input.heightMax}
-                        onChange={handleInputChange}
+                        onChange={(e) => handleInputChange(e)}
                     />
                     <label> Cm</label>
                 </div>
@@ -107,7 +114,7 @@ export default function DogCreation (){
                         name='weightMin' 
                         placeholder='Enter MINIMUM weight in cm...' 
                         value={input.weightMin}
-                        onChange={handleInputChange}
+                        onChange={(e) => handleInputChange(e)}
                     />
                     <label> - </label>
                     <input className={''}
@@ -115,7 +122,7 @@ export default function DogCreation (){
                         name='weightMax' 
                         placeholder='Enter MAXIMUM weight in cm...' 
                         value={input.weightMax}
-                        onChange={handleInputChange}
+                        onChange={(e) => handleInputChange(e)}
                     />
                     <label> kg</label>
                 </div>
@@ -129,7 +136,7 @@ export default function DogCreation (){
                         name='life_span' 
                         placeholder='Enter life expectency in years...' 
                         value={input.life_span}
-                        onChange={handleInputChange}
+                        onChange={(e) => handleInputChange(e)}
                     />
                     <label> Years</label>
                 </div>
@@ -138,12 +145,18 @@ export default function DogCreation (){
                 <br />
                 <div>
                     <label>Select temperaments: </label>
-                    <select onChange={e => handleTemperament(e)}>
-                        <option key={0} value="noTemp">Select a temperament...</option>
+                    <select onChange={e => handleTemperament(e)} ref={selectRef}>
+                        <option key={0} value={0}>Select a temperament...</option>
                         {
                         temperaments.map(temp =>
-                        <option key={temp.id} value={temp.name}>{temp.name}</option> )}
+                        <option key={temp.id} value={temp.name}>{temp.name}</option> )
+                        }
                     </select>
+                    <div>
+                        {/* IMPROVE THIS */}
+                        <ul><li>{input.temperament.map(temp => `${temp}, ` )}</li></ul>
+                    </div>
+                    
                 </div>
                 <br/>
                 <hr />
