@@ -110,7 +110,6 @@ router.post('/dog', async (req,res,next) =>{
     if(typeof life_span !=='string') res.status(404).json({msg:'life_span needs to be a string'});
     if(!Array.isArray(temperament)) res.status(404).json({msg:'temperament needs to be an array'});
 
-    //agregar que el temperamento exista en la base datos
     try {
         // const dogsList = await middleware.getDogsByName(name);
         let dogsList = await middleware.getDogs();

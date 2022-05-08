@@ -7,6 +7,7 @@ import Pagination from '../Pagination/Pagination';
 import DogCard from '../DogCard/DogCard';
 import { Link } from 'react-router-dom';
 import './dogcards.css'
+import defaultDog from '../../Multimedia/defaultDog.png'
 
 export default function DogCards() {
     // Initial states and local states for filters
@@ -21,7 +22,7 @@ export default function DogCards() {
     const showTemps = !filteredDogs.length ? temperaments : filteredDogsTemperaments(filteredDogs);
     // Local states for pagination 
     const [currentPage, setCurrentPage] = useState(1);
-    const [dogsPerPage, setDogsPerPage] = useState(8);
+    const [dogsPerPage] = useState(8);
     const indexOfLastDog = currentPage * dogsPerPage;
     const indexOfFirstDog = indexOfLastDog - dogsPerPage;
     const currentDogs = showDogs.slice(indexOfFirstDog,indexOfLastDog);
@@ -167,7 +168,7 @@ export default function DogCards() {
             <Pagination dogsPerPage = {dogsPerPage} showDogs = {showDogs.length} pagination = {pagination}/>
             {currentDogs.map(dog => (
                 <Link key={dog.id} to={`/dogs/${dog.id}`}>
-                    <DogCard key={dog.id} id={dog.id} name={dog.name} image={dog.image} weight={dog.weight} temperament={dog.temperament}/>
+                    <DogCard key={dog.id} id={dog.id} name={dog.name} image={dog.image ? dog.image : defaultDog} weight={dog.weight} temperament={dog.temperament}/>
                 </Link>
                 ))
             }
