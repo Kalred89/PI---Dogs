@@ -100,7 +100,7 @@ router.get('/temperament', async (req,res,next) =>{
 // Route POST/dog receives the data through the body and creates a new dog race in the Dog's database.
 router.post('/dog', async (req,res,next) =>{
 
-    const {name , height, weight, life_span, temperament} = req.body;
+    const {name , height, weight, life_span, temperament, image} = req.body;
 
     // if(!name || !height || !weight) res.status(404).json({msg:'Mandatory fields incomplete'});
     if(!name) res.status(404).json({msg:'Please add a name'});
@@ -128,6 +128,7 @@ router.post('/dog', async (req,res,next) =>{
                 height: height ,
                 weight: weight,
                 life_span: life_span,
+                image: image
             }
         })
 

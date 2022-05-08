@@ -32,7 +32,8 @@ export default function DogCreation (){
         input.height = `${input.heightMin} - ${input.heightMax}` ;
         input.weight = `${input.weightMin} - ${input.weightMax}` ;
         console.log('input:', input);
-        // dispatch(postNewDog(input));
+        console.log('input:', input.temperament);
+        dispatch(postNewDog(input));
         setInput({
             name: '',
             height: '',
@@ -43,25 +44,34 @@ export default function DogCreation (){
             weightMax: '',
             life_span: '',
             temperament: [],
-            image: ''
+            image: '',
         })
         selectRef.current.value = 0;
         // history.push('/home');
     }
 
-
     function handleInputChange(e){ 
         setInput(
             {...input, [e.target.name]: e.target.value}
-        );  
+        ); 
     }
 
     function handleTemperament(e){
-        setInput({
-            ...input, temperament: [...input.temperament, e.target.value]
-        });  
+        if(e.target.value !=='0' && !input.temperament.includes(e.target.value)){
+            setInput({
+                ...input, temperament: [...input.temperament, e.target.value]
+            });
+        }else if (input.temperament.includes(e.target.value)) {
+            window.alert(`Your dog already has this temperament, please select a different one.`);
+        }
     }
 
+    function onClose(temp) {
+        setInput({
+            ...input, temperament: [input.temperament.filter(t => t !== temp)]
+        });
+    }
+    // console.log(input);
     // console.log(dogs.length);
     // console.log(dogs);
     return (
@@ -153,27 +163,34 @@ export default function DogCreation (){
                         }
                     </select>
                     <div>
-                        {/* IMPROVE THIS */}
-                        <ul><li>{input.temperament.map(temp => `${temp}, ` )}</li></ul>
+                        <ul>
+                            <li>{
+                                input.temperament.map(temp => 
+                                <div key={temp}>
+                                    <p>{temp}</p>
+                                    <button onClick={() => onClose(temp)}>X</button>
+                                </div>)
+                            }</li>
+                        </ul>
                     </div>
                     
                 </div>
                 <br/>
                 <hr />
                 <br />
-                {/* <div>
+                <div>
                     <label>Image: </label>
                     <input className={''}
-                        type="file" 
+                        type="text" 
                         name='image' 
                         placeholder='Add an image to your new dog' 
-                        value={''}
-                        onChange={handleInputChange}
+                        value={input.image}
+                        onChange={(e) => handleInputChange(e)}
                     />
                 </div>
                 <br/>
                 <hr />
-                <br /> */}
+                <br />
                 <div>
                     <input type="submit" value='Submit'/>
                 </div>

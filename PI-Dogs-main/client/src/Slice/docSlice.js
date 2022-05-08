@@ -106,3 +106,5 @@ export const filteredDogsTemperaments = (dogs) =>{
     }
     return idTemperaments;
 }
+
+
