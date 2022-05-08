@@ -123,9 +123,15 @@ export default function DogCreation (){
 
     function handleTemperament(e){
         if(e.target.value !=='0' && !input.temperament.includes(e.target.value)){
+            setErrors(validate(
+                {
+                ...input, temperament: [...input.temperament, e.target.value]
+            },dogs));
+
             setInput({
                 ...input, temperament: [...input.temperament, e.target.value]
             });
+
         }else if (input.temperament.includes(e.target.value)) {
             window.alert(`Your dog already has this temperament, please select a different one.`);
         }
