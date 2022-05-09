@@ -24,7 +24,13 @@ module.exports = {
     },
 
     getDogsDB: async () => {
-            const dogsDB = await Dog.findAll();
+            const dogsDB = await Dog.findAll({
+                include: {
+                    model: Temperament,
+                    attributes: ["name", "id"],
+                    through: { attributes: [] },
+                }
+            });
             return dogsDB;
     },
 
@@ -32,6 +38,11 @@ module.exports = {
         const dogDB = await Dog.findOne({
             where: {
                 id: idDog,
+            },
+            include: {
+                model: Temperament,
+                attributes: ["name", "id"],
+                through: { attributes: [] },
             }
         });
         return dogDB;

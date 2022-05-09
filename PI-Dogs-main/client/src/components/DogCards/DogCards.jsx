@@ -125,7 +125,6 @@ export default function DogCards() {
         selectDogRef.current.value= "noBreed";
         selectSort.current.value='NoSort';      
     }
-
     return (
         <div>
             <label>Filter by name: </label>
@@ -156,7 +155,7 @@ export default function DogCards() {
             <select name="Sort" id="Sort" onChange={(e) => {
                 HandleSortBy(e.target.value);
             }} ref={selectSort}>
-                <option key={0} value='NoSort'>Select an sorting...</option>
+                <option key={0} value='NameAZ'>Select an sorting...</option>
                 <option key={1} value='NameAZ'>Name: A to Z</option>
                 <option key={2} value='NameZA'>Name: Z to A</option>
                 <option key={3} value='WeightLH'>Weight: Low to High</option>
@@ -168,7 +167,7 @@ export default function DogCards() {
             <Pagination dogsPerPage = {dogsPerPage} showDogs = {showDogs.length} pagination = {pagination}/>
             {currentDogs.map(dog => (
                 <Link key={dog.id} to={`/dogs/${dog.id}`}>
-                    <DogCard key={dog.id} id={dog.id} name={dog.name} image={dog.image ? dog.image : defaultDog} weight={dog.weight} temperament={dog.temperament}/>
+                    <DogCard key={dog.id} id={dog.id} name={dog.name} image={dog.image ? dog.image : defaultDog} weight={dog.weight} temperament={dog.temperament ? dog.temperament : dog.temperaments?.map(t => t.name).join(' , ')}/>
                 </Link>
                 ))
             }

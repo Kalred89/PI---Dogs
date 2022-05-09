@@ -61,9 +61,6 @@ export default function DogCreation (){
         image: ''
     })
     const [errors, setErrors] = useState({});
-    const [buttonState, setButtonState] = useState({
-        disable: true
-    });
 
     useEffect(()=>{
         dispatch(getAllTemperaments())
@@ -75,9 +72,9 @@ export default function DogCreation (){
         input.height = `${input.heightMin} - ${input.heightMax}` ;
         input.weight = `${input.weightMin} - ${input.weightMax}` ;
         if(!Object.keys(errors).length && input.name !== ""){
-            console.log("input:", input);
-            console.log("errors:", errors);
-            // dispatch(postNewDog(input));
+            // console.log("input:", input);
+            // console.log("errors:", errors);
+            dispatch(postNewDog(input));
             setInput({
                 name: '',
                 height: '',
@@ -103,7 +100,7 @@ export default function DogCreation (){
                 image: '',
             })
             selectRef.current.value = 0;
-            // history.push('/home');
+            history.push('/home');
         }else{
             window.alert('Please, complete the mandatory fields correctly')
         }
