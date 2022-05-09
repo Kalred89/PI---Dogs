@@ -29,7 +29,7 @@ export default function DogCards() {
     // Sets the initial states
     useEffect(()=>{
         dispatch(getAllDogs());
-        dispatch(getAllTemperaments())
+        dispatch(getAllTemperaments())   
     },[dispatch])
 
     const pagination = (pageNumber) => {
@@ -113,7 +113,20 @@ export default function DogCards() {
                     }));
                 } 
                 break;
-            default: console.log("Please, select a sorting method");
+            default: 
+                if (!filteredDogs.length){
+                    setFilteredDogs(dogs?.slice().sort((dogA, dogB) => {
+                        if (dogA.name < dogB.name) return -1;
+                        if (dogA.name > dogB.name) return 1;
+                        return 0; 
+                    })); 
+                }else{
+                    setFilteredDogs(prev=> prev?.slice().sort((dogA, dogB) => {
+                        if (dogA.name < dogB.name) return -1;
+                        if (dogA.name > dogB.name) return 1;
+                        return 0; 
+                    }));
+                } 
         }
 
     }
@@ -125,6 +138,9 @@ export default function DogCards() {
         selectDogRef.current.value= "noBreed";
         selectSort.current.value='NoSort';      
     }
+    // console.log(dogs);
+    // console.log(currentDogs);
+    // console.log(showDogs);
     return (
         <div>
             <label>Filter by name: </label>
@@ -155,7 +171,7 @@ export default function DogCards() {
             <select name="Sort" id="Sort" onChange={(e) => {
                 HandleSortBy(e.target.value);
             }} ref={selectSort}>
-                <option key={0} value='NameAZ'>Select an sorting...</option>
+                <option key={0} value='NoSort'>Select an sorting...</option>
                 <option key={1} value='NameAZ'>Name: A to Z</option>
                 <option key={2} value='NameZA'>Name: Z to A</option>
                 <option key={3} value='WeightLH'>Weight: Low to High</option>

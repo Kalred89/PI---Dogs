@@ -100,7 +100,9 @@ export default function DogCreation (){
                 image: '',
             })
             selectRef.current.value = 0;
-            history.push('/home');
+            dispatch(getAllDogs());
+            window.alert('Dog created successfully')
+            // history.push('/home');
         }else{
             window.alert('Please, complete the mandatory fields correctly')
         }
@@ -280,11 +282,7 @@ export default function DogCreation (){
             </form>
         </div>
     )
-
 }
-
-
-
 // Ruta de creación de raza de perro: debe contener
 
 // [ ] Un formulario controlado con JavaScript con los siguientes campos:
