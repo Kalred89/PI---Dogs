@@ -180,14 +180,15 @@ export default function DogCards() {
 
             <button onClick={handleClear}>Clear all filters</button> 
             
-            <Pagination dogsPerPage = {dogsPerPage} showDogs = {showDogs.length} pagination = {pagination}/>
+            <Pagination currentPage = {currentPage} dogsPerPage = {dogsPerPage} showDogs = {showDogs.length} pagination = {pagination}/>
+
             {currentDogs.map(dog => (
                 <Link key={dog.id} to={`/dogs/${dog.id}`}>
                     <DogCard key={dog.id} id={dog.id} name={dog.name} image={dog.image ? dog.image : defaultDog} weight={dog.weight} temperament={dog.temperament ? dog.temperament : dog.temperaments?.map(t => t.name).join(' , ')}/>
                 </Link>
                 ))
             }
-            <Pagination dogsPerPage = {dogsPerPage} showDogs = {showDogs.length} pagination = {pagination}/>
+            <Pagination currentPage = {currentPage} dogsPerPage = {dogsPerPage} showDogs = {showDogs.length} pagination = {pagination}/>
         </div>
     )
 }
