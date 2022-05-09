@@ -1,0 +1,121 @@
+.create-form{
+    background-color: beige;
+    background-size: cover;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    color:darkslateblue;
+    text-align: center;
+    height: 100vh;
+    padding-top: 10px;
+}
+.create-form h1{
+    font-size:xx-large;
+}
+.create-form .form{
+    width: 50%;
+    height: max-content;
+    padding: 30px;
+    margin: auto;
+    margin-top: 50px;
+    border-radius: 10px;
+    background-color: white;
+    display: inline-block;
+    font-weight: bolder;
+}
+
+.create-form label span{
+    color: red;
+}
+
+.create-form select, .create-form input[type=text],[type=number]{
+    background-color: rgb(232, 241, 241);
+    width: 40%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 2px solid rgb(255, 255, 255);
+    border-radius: 4px;
+}
+
+.create-form input[type=number]{
+    width: 25%;
+}
+
+.create-form select, .create-form input[type=text],[type=number]:focus {
+    background-color: rgb(225, 233, 233);
+}
+
+.create-form input[type=submit], .create-form .create, .create-form .back{
+    background-color: rgb(167, 169, 243);
+    font-size:medium;
+    width: max-content;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 2px solid rgb(255, 255, 255);
+    border-radius: 4px;
+}
+
+.create-form input[type=submit]:hover {
+    background-color: #1829e3;
+    color: white;
+}
+
+.create-form .back:hover {
+    background-color: #1829e3;
+    color: white;
+}
+
+.create-form ul > li{
+    list-style-type: none;
+}
+
+.create-form .expressed, .obligatory{
+    font-weight:lighter;
+    font-variant: small-caps;
+}
+
+.create-form p.danger {
+    color: red;
+    font-size: 10px;
+}
+
+.create-form input.danger, .create-form select.danger{
+    border: 2px solid red;
+}
+
+.create-form .selected-temps{
+    border: rgb(0, 157, 255) groove;
+    padding: 2px;
+    margin: 3px;
+    width: max-content;
+    display: inline-block;
+    border-radius: 6px;
+}
+
+.create-form .selected-temps:hover{
+    border: rgb(0, 21, 255) groove;
+    padding: 2px;
+    margin: 3px;
+    width: max-content;
+    display: inline-block;
+    border-radius: 6px;
+}
+
+.create-form .selected-text{
+    float: left;
+    padding: 1px;
+    margin: 1px;
+}
+
+.create-form .selected-x{
+    float: right;
+    padding: 1px;
+    margin: 1px;
+    background-color: rgb(0, 200, 255);
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 15px;
+    border-radius: 4px;
+}

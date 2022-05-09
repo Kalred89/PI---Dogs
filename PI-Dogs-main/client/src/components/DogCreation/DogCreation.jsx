@@ -1,8 +1,10 @@
 import React from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { postNewDog, getAllTemperaments, getAllDogs } from "../../Slice/docSlice";
+import '../DogCreation/dogcreation.css'
 
 export function validate (input, dogs){
     let errors = {};
@@ -45,7 +47,7 @@ export function validate (input, dogs){
 
 export default function DogCreation (){
     const dispatch = useDispatch();
-    const history = useHistory();
+    // const history = useHistory();
     const selectRef= useRef();
     const { dogs, temperaments } = useSelector((state) => state.dogsSlice);
     const [input, setInput] = useState({
@@ -134,110 +136,104 @@ export default function DogCreation (){
         }else if (input.temperament.includes(e.target.value)) {
             window.alert(`Your dog already has this temperament, please select a different one.`);
         }
+        selectRef.current.value = "0";
     }
 
     function handleDelete(temp) {
         setInput({
-            ...input, temperament: [input.temperament.filter(t => t !== temp)]
+            ...input, temperament: input.temperament.filter(t => t !== temp)
         });
     }
     // console.log(input);
     // console.log(dogs.length);
     return (
-        <div>
-            <Link to='/home'><button>Go back</button></Link>
+        <div className="create-form">
             <h1>Complete the form below to create your own new dog breed!</h1>
-            <label>Fields with * are obligatory.</label>
-            <form onSubmit={(e) => handleSubmit(e)}>
+            <form onSubmit={(e) => handleSubmit(e)} className='form'>
+                <label className="obligatory">fields with <span>*</span> are obligatory.</label>
                 <br/>
-                <hr />
-                <br />
                 <div>
-                    <label>Dog Breed*: </label>
-                    <input className={''}
+                    <label>Dog Breed:<span> * </span></label>
+                    <input className={errors.name && "danger"}
                         type="text" 
                         name='name' 
-                        placeholder='Enter a name for your new dog...' 
+                        placeholder='Name...' 
                         value={input.name}
                         onChange={(e) => handleInputChange(e)}
                     />
                     {errors.name && (
-                        <p>{errors.name}</p>
+                        <p className="danger">{errors.name}</p>
                     )}
                 </div>
                 <br/>
                 <hr />
-                <br />
                 <div>
-                    <label>Height - Min & Max* </label>
-                    <input className={''}
+                    <label>Height (Min/Max):<span> * </span> </label>
+                    <input className={errors.height && "danger"}
                         type="number" 
                         name='heightMin' 
-                        placeholder='Enter MINIMUM height in cm...' 
+                        placeholder='MIN' 
                         value={input.heightMin}
                         onChange={(e) => handleInputChange(e)}
                     />
                     <label> - </label>
-                    <input className={''}
+                    <input className={errors.height && "danger"}
                         type="number" 
                         name='heightMax' 
-                        placeholder='Enter MAXIMUM height in cm...' 
+                        placeholder='MAX' 
                         value={input.heightMax}
                         onChange={(e) => handleInputChange(e)}
                     />
-                    <label> Cm</label>
+                    <label className="expressed">expressed in cm.</label>
                     {errors.height && (
-                        <p>{errors.height}</p>
+                        <p className="danger">{errors.height}</p>
                     )}
                 </div>
                 <br/>
                 <hr />
-                <br />
                 <div>
-                    <label>Weight - Min & Max* </label>
-                    <input className={''}
+                    <label>Weight (Min/Max):<span> * </span></label>
+                    <input className={errors.weight && "danger"}
                         type="number" 
                         name='weightMin' 
-                        placeholder='Enter MINIMUM weight in cm...' 
+                        placeholder='MIN' 
                         value={input.weightMin}
                         onChange={(e) => handleInputChange(e)}
                     />
                     <label> - </label>
-                    <input className={''}
+                    <input className={errors.weight && "danger"}
                         type="number" 
                         name='weightMax' 
-                        placeholder='Enter MAXIMUM weight in cm...' 
+                        placeholder='MAX' 
                         value={input.weightMax}
                         onChange={(e) => handleInputChange(e)}
                     />
-                    <label> kg</label>
+                    <label className="expressed">expressed in kg.</label>
                     {errors.weight && (
-                        <p>{errors.weight}</p>
+                        <p className="danger">{errors.weight}</p>
                     )}
                 </div>
                 <br/>
                 <hr />
-                <br />
                 <div>
-                    <label>Life expectency*: </label>
-                    <input className={''}
+                    <label>Life expectency:<span> * </span></label>
+                    <input className={errors.life_span && "danger"}
                         type="number" 
                         name='life_span' 
-                        placeholder='Enter life expectency in years...' 
+                        placeholder='Years' 
                         value={input.life_span}
                         onChange={(e) => handleInputChange(e)}
                     />
-                    <label> Years</label>
+                    {/* <label> years</label> */}
                     {errors.life_span && (
-                        <p>{errors.life_span}</p>
+                        <p className="danger">{errors.life_span}</p>
                     )}
                 </div>
                 <br/>
                 <hr />
-                <br />
                 <div>
-                    <label>Select temperaments*: </label>
-                    <select onChange={e => handleTemperament(e)} ref={selectRef}>
+                    <label>Temperaments:<span> * </span> </label>
+                    <select onChange={e => handleTemperament(e)} ref={selectRef} className={errors.temperament && "danger"}>
                         <option key={0} value={0}>Select a temperament...</option>
                         {
                         temperaments.map(temp =>
@@ -248,36 +244,36 @@ export default function DogCreation (){
                         <ul>
                             <li>{
                                 input.temperament.map(temp => 
-                                <div key={temp}>
-                                    <p>{temp}</p>
-                                    <button onClick={() => handleDelete(temp)}>X</button>
-                                </div>)
-                            }</li>
+                                <div key={temp} className='selected-temps'>
+                                    <p className='selected-text'>{temp}</p>
+                                    <button className='selected-x' onClick={() => handleDelete(temp)}>X</button>
+                                </div>)}
+                            </li>
                         </ul>
                     </div>
                     {errors.temperament && (
-                        <p>{errors.temperament}</p>
+                        <p className="danger">{errors.temperament}</p>
                     )}
                     
                 </div>
                 <br/>
                 <hr />
-                <br />
                 <div>
                     <label>Image: </label>
                     <input className={''}
                         type="text" 
                         name='image' 
-                        placeholder='Add an image to your new dog' 
+                        placeholder='Image of the dog' 
                         value={input.image}
                         onChange={(e) => handleInputChange(e)}
                     />
                 </div>
                 <br/>
                 <hr />
-                <br />
                 <div>
-                    <input type="submit" value='Submit'/>
+                    <Link to='/home'><button className='back'> ◀ Go back</button></Link>
+
+                    <input type="submit" value='Create' className="create"/>
                 </div>
             </form>
         </div>
