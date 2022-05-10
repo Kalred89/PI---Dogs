@@ -7,6 +7,7 @@ const initialState = {
     temperaments: [],
 }
 
+// sets the states
 export const dogsSlice = createSlice({
     name: 'dogs',
     initialState,
@@ -37,6 +38,7 @@ export const { setDogsList, setTemperamentsList, setDogDetails, setNewDog } = do
 
 export default dogsSlice.reducer
 
+// gets all dogs from the back.
 export const getAllDogs = () => {
     return (dispatch) =>{
         axios
@@ -48,6 +50,7 @@ export const getAllDogs = () => {
     }
 }
 
+// gets all temperaments from the back.
 export const getAllTemperaments = () => {
     return (dispatch) =>{
         axios
@@ -59,7 +62,7 @@ export const getAllTemperaments = () => {
     }
 }
 
-
+// gets the details of an specific dog from the back.
 export const getDogDetails = (id) => {
     return (dispatch) =>{
         axios
@@ -71,6 +74,7 @@ export const getDogDetails = (id) => {
     }
 }
 
+// posts a new dog.
 export const postNewDog = (payload) => {
     return (dispatch) =>{
         axios
@@ -82,6 +86,7 @@ export const postNewDog = (payload) => {
     }
 }
 
+// gets all the temperaments and orders them
 export const filteredDogsTemperaments = (dogs) =>{
     let arrayTemperaments= [];
     let idTemperaments=[];

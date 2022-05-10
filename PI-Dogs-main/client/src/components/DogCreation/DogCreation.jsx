@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { postNewDog, getAllTemperaments, getAllDogs } from "../../Slice/docSlice";
 import '../DogCreation/dogcreation.css'
 
+// Validations for the creation form
 export function validate (input, dogs){
     let errors = {};
 
