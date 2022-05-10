@@ -1,12 +1,15 @@
 import React from "react";
+import './dogcard.css'
 
 export default function DogCard({id, name, image, weight, temperament, temperaments}) {
     return (
         <div key={id} className='Card'>
-            <img src={image} alt={name} width='350px' height='350px' className='Image'/>
-            <p>Name: {name}</p>
-            <p>Weight: {weight} kg.</p>
-            <p>Temperament: {temperament  ? temperament : temperaments}</p>
+            <img src={image} alt={name} className='Image'/>
+            <div className='dogInfo'>
+                <p><strong>Name: </strong>{name}</p>
+                <p> <strong>Weight: </strong>{weight} kg.</p>
+                <p><strong>Temperament: </strong> {temperament  ? temperament : temperaments}</p>
+            </div>
         </div>  
     )
 }

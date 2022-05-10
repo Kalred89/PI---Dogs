@@ -44,10 +44,15 @@
     background-color: rgb(225, 233, 233);
 }
 
+.create-form select{
+    text-transform: capitalize;
+}
+
 .create-form input[type=submit], .create-form .create, .create-form .back{
     background-color: rgb(167, 169, 243);
-    font-size:medium;
+    font-size:large;
     width: max-content;
+    height: 50px;
     padding: 12px 20px;
     margin: 8px 0;
     box-sizing: border-box;
@@ -55,12 +60,7 @@
     border-radius: 4px;
 }
 
-.create-form input[type=submit]:hover {
-    background-color: #1829e3;
-    color: white;
-}
-
-.create-form .back:hover {
+.create-form .back:hover , .create-form input[type=submit]:hover {
     background-color: #1829e3;
     color: white;
 }

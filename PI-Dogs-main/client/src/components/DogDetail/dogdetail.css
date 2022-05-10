@@ -1,0 +1,61 @@
+.dogDetail .ContainerDogs{
+    text-align: center;
+    height: 100%;
+}
+
+.dogDetail h2{
+    font-style: italic;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: xx-large;
+    font-variant: small-caps;
+
+}
+
+.dogDetail .Card {
+    color: darkslateblue;
+    border: white solid;
+    background-color: rgb(220, 220, 239);
+    border-radius: 5px;
+    /* width: max-content; */
+    height: auto;
+    padding: 10px;
+    /* margin: 100px; */
+    margin-top: 100px;
+    margin-left: 30%;
+    margin-right: 30%;
+    font-size: large;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+}
+
+.dogDetail .Card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+.dogDetail .Image{
+    border-radius: 5px 5px 0 0;
+    width: 50%;
+    height: auto;
+}
+
+.dogDetail .dogInfo{
+    text-align:center;
+    text-transform: capitalize;
+}
+
+.dogDetail .back{
+    background-color: rgb(167, 169, 243);
+    font-size:large;
+    width: max-content;
+    height: 50px;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 2px solid rgb(255, 255, 255);
+    border-radius: 4px;
+}
+
+.dogDetail .back:hover{
+    background-color: #1829e3;
+    color: white;
+}

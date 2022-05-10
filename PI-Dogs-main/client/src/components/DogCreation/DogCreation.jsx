@@ -216,7 +216,7 @@ export default function DogCreation (){
                 <br/>
                 <hr />
                 <div>
-                    <label>Life expectency:<span> * </span></label>
+                    <label>Life expectancy:<span> * </span></label>
                     <input className={errors.life_span && "danger"}
                         type="number" 
                         name='life_span' 

@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import {getDogDetails} from '../../Slice/docSlice';
 import defaultDog from '../../Multimedia/defaultDog.png'
+import './dogdetail.css'
 
 export default function Details (props){
     const dispatch = useDispatch();
@@ -15,19 +16,24 @@ export default function Details (props){
     const { dogDetails }  = useSelector((state) => state.dogsSlice);
 
     return (
-        <div>
+        <div className='dogDetail'>
             {dogDetails
-            ?<div key={dogDetails.id} >
-                <img src={dogDetails.image ? dogDetails.image : defaultDog} alt={dogDetails.name} width='350px' height='350px'/>
-                <p>Name: {dogDetails.name}</p>
-                <p>Weight: {dogDetails.weight} kg.</p>
-                <p>Height: {dogDetails.height} Cm.</p>
-                <p>Life span: {dogDetails.life_span?.includes('years') ? dogDetails.life_span : `${dogDetails.life_span} year(s)`}</p>
-                <p>Temperament: {dogDetails.temperament ? dogDetails.temperament : dogDetails.temperaments?.map(t => t.name).join(' , ')}</p>
+            ?<div key={dogDetails.id} className='Card'>
+                <h2>{dogDetails.name}</h2>
+                <img src={dogDetails.image ? dogDetails.image : defaultDog} alt={dogDetails.name} width='350px' height='350px' className='Image'/>
+                <div className='dogInfo'>
+                    {/* <p><strong>Breed: </strong>{dogDetails.name}</p> */}
+                    <label><u><strong>Breed Details:</strong></u></label>
+                    <br />
+                    <p><strong>Weight: </strong> {dogDetails.weight} kg.</p>
+                    <p><strong>Height: </strong>  {dogDetails.height} Cm.</p>
+                    <p><strong>Life expectancy: </strong> {dogDetails.life_span?.includes('years') ? dogDetails.life_span : `${dogDetails.life_span} year(s)`}</p>
+                    <p><strong>Temperament: </strong>  {dogDetails.temperament ? dogDetails.temperament : dogDetails.temperaments?.map(t => t.name).join(' , ')}</p>
+                </div>
             </div>
             :  <p>Loading...</p>     
             }
-            <Link to='/home'><button>Go back</button></Link>
+            <Link to='/home'><button className='back'>◀ Go back</button></Link>
         </div>
     )
 }

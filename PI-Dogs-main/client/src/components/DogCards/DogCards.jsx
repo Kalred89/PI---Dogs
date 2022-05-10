@@ -142,9 +142,9 @@ export default function DogCards() {
     // console.log(currentDogs);
     // console.log(showDogs);
     return (
-        <div>
-            <label>Filter by name: </label>
-            <input type="text" placeholder='Buscar perros...' onChange={e => handleSubmit(e)} ref={inputRef}></input>
+        <div className="dogCards">
+            <label>Search by name: </label>
+            <input type="text" placeholder='Breed...' onChange={e => handleSubmit(e)} ref={inputRef}></input>
 
             <label>Filter by temperament: </label>
             <select name="Temperaments" id="Temperaments" onChange={e => handleTemperament(e)} ref={selectRef}>
@@ -171,23 +171,26 @@ export default function DogCards() {
             <select name="Sort" id="Sort" onChange={(e) => {
                 HandleSortBy(e.target.value);
             }} ref={selectSort}>
-                <option key={0} value='NoSort'>Select an sorting...</option>
+                <option key={0} value='NoSort'>Sort by...</option>
                 <option key={1} value='NameAZ'>Name: A to Z</option>
                 <option key={2} value='NameZA'>Name: Z to A</option>
                 <option key={3} value='WeightLH'>Weight: Low to High</option>
                 <option key={4} value='WeightHL'>Weight: High to Low</option>
             </select>
 
-            <button onClick={handleClear}>Clear all filters</button> 
+            <button className="buttonClear" onClick={handleClear}>Clear all filters</button> 
             
             <Pagination currentPage = {currentPage} dogsPerPage = {dogsPerPage} showDogs = {showDogs.length} pagination = {pagination}/>
+            
+            <div className="ContainerDogs">
+                {currentDogs.map(dog => (
+                    <Link key={dog.id} to={`/dogs/${dog.id}`} style={{ textDecoration: 'none' }}>
+                        <DogCard key={dog.id} id={dog.id} name={dog.name} image={dog.image ? dog.image : defaultDog} weight={dog.weight} temperament={dog.temperament ? dog.temperament : dog.temperaments?.map(t => t.name).join(' , ')}/>
+                    </Link>
+                    ))
+                }
+            </div>
 
-            {currentDogs.map(dog => (
-                <Link key={dog.id} to={`/dogs/${dog.id}`}>
-                    <DogCard key={dog.id} id={dog.id} name={dog.name} image={dog.image ? dog.image : defaultDog} weight={dog.weight} temperament={dog.temperament ? dog.temperament : dog.temperaments?.map(t => t.name).join(' , ')}/>
-                </Link>
-                ))
-            }
             <Pagination currentPage = {currentPage} dogsPerPage = {dogsPerPage} showDogs = {showDogs.length} pagination = {pagination}/>
         </div>
     )
