@@ -8,6 +8,7 @@ describe('Dog model', () => {
     }));
   describe('Validators', () => {
     beforeEach(() => Dog.sync({ force: true }));
+
     describe('name', () => {
       it('should throw an error if name is null', (done) => {
         Dog.create({})
@@ -18,5 +19,12 @@ describe('Dog model', () => {
         Dog.create({ name: 'Pug' });
       });
     });
+
+    describe('id', () =>{
+      if('Should automatically generate an id for each dog', () => {
+        Dog.create({ id: '' });
+      });
+    });
+
   });
 });

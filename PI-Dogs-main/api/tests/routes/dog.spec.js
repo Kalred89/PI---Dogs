@@ -9,7 +9,7 @@ const dog = {
   name: 'Pug',
 };
 
-describe('Videogame routes', () => {
+describe('Dog routes', () => {
   before(() => conn.authenticate()
   .catch((err) => {
     console.error('Unable to connect to the database:', err);

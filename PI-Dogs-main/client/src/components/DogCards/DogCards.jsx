@@ -13,6 +13,7 @@ export default function DogCards() {
     // Initial states and local states for filters
     const { dogs, temperaments } = useSelector((state) => state.dogsSlice);
     const [filteredDogs, setFilteredDogs] = useState([]);
+    const [filteredSubmit, setFilteredSubmit]  = useState([1]);
     const inputRef= useRef();
     const selectRef= useRef();
     const selectDogRef= useRef();
@@ -38,8 +39,13 @@ export default function DogCards() {
     // Handles de input search of dogs by name
     function handleSubmit(e){
         let filtered = dogs.filter( (dog) => dog.name.includes(e.target.value?.toLowerCase().trim()));
-        setFilteredDogs(filtered);
-        selectRef.current.value = "noTemp";  
+        if(filtered.length){
+            setFilteredDogs(filtered);
+            setFilteredSubmit(filtered);
+            selectRef.current.value = "noTemp";  
+        }else{
+            setFilteredSubmit(filtered);
+        }
     }
     // Handles de select search of temperaments 
     function handleTemperament(e){
@@ -183,6 +189,11 @@ export default function DogCards() {
             <Pagination currentPage = {currentPage} dogsPerPage = {dogsPerPage} showDogs = {showDogs.length} pagination = {pagination}/>
             
             <div className="ContainerDogs">
+                {
+                    filteredSubmit.length === 0 
+                    ? <p className="danger">There aren't any dogs breed that coincide with the search</p> 
+                    : null
+                }
                 {currentDogs.map(dog => (
                     <Link key={dog.id} to={`/dogs/${dog.id}`} style={{ textDecoration: 'none' }}>
                         <DogCard key={dog.id} id={dog.id} name={dog.name} image={dog.image ? dog.image : defaultDog} weight={dog.weight} temperament={dog.temperament ? dog.temperament : dog.temperaments?.map(t => t.name).join(' , ')}/>
