@@ -8,7 +8,7 @@ export default function Pagination ({currentPage, dogsPerPage, showDogs, paginat
         pageNumbers.push(i+1);
     }
 
-    console.log(currentPage);
+    // console.log(currentPage);
 
     return (
         <nav className='component-pagination'>

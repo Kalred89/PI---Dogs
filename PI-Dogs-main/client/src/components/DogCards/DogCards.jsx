@@ -1,5 +1,4 @@
 import React from "react";
-// import Style from '../DogCards/dogcards.module.css';
 import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getAllDogs, getAllTemperaments, filteredDogsTemperaments } from '../../Slice/docSlice';
@@ -11,7 +10,7 @@ import defaultDog from '../../Multimedia/defaultDog.png'
 
 export default function DogCards() {
     // Initial states and local states for filters
-    const { dogs, temperaments } = useSelector((state) => state.dogsSlice);
+    const { dogs, temperaments,  } = useSelector((state) => state.dogsSlice);
     const [filteredDogs, setFilteredDogs] = useState([]);
     const [filteredSubmit, setFilteredSubmit]  = useState([1]);
     const inputRef= useRef();
@@ -30,31 +29,32 @@ export default function DogCards() {
     // Sets the initial states
     useEffect(()=>{
         dispatch(getAllDogs());
-        dispatch(getAllTemperaments())   
+        dispatch(getAllTemperaments()) 
     },[dispatch])
 
     const pagination = (pageNumber) => {
         setCurrentPage(pageNumber)
     }
-    // Handles de input search of dogs by name
+    // Handles de input search of dogs by name.
     function handleSubmit(e){
         let filtered = dogs.filter( (dog) => dog.name.includes(e.target.value?.toLowerCase().trim()));
-        if(filtered.length){
-            setFilteredDogs(filtered);
-            setFilteredSubmit(filtered);
-            selectRef.current.value = "noTemp";  
-        }else{
+        setFilteredDogs(filtered);
+        if(e.target.value !== "noBreed"){
             setFilteredSubmit(filtered);
         }
+        selectRef.current.value = "noTemp";
+        setCurrentPage(1);  
     }
-    // Handles de select search of temperaments 
+    // Handles de select search of temperaments
     function handleTemperament(e){
         if (!filteredDogs.length){
             let filtered = dogs.filter( (dog) => dog.temperament?.includes(e.target.value))
-            setFilteredDogs(filtered);    
-        } else {
-            setFilteredDogs(prev=> prev.filter ( (dog) => dog.temperament?.includes(e.target.value)))
+            setFilteredDogs(filtered); 
+        } 
+        else {
+            setFilteredDogs(prev=> prev?.filter ( (dog) => dog.temperament?.includes(e.target.value)))
         }
+        setCurrentPage(1);  
     }
     // Handles the sorting options
     function HandleSortBy(sorting){
@@ -156,8 +156,8 @@ export default function DogCards() {
             <select name="Temperaments" id="Temperaments" onChange={e => handleTemperament(e)} ref={selectRef}>
                 <option key={0} value="noTemp">Select a temperament...</option>
                 {
-                    showTemps.map(temp =>
-                        <option key={temp.id} value={temp.name}>{temp.name}</option>
+                    showTemps?.map(temp =>
+                        <option key={temp.name.trim()} value={temp.name.trim()}>{temp.name}</option>
                     )
                 
                 }

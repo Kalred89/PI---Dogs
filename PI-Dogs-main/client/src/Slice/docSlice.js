@@ -86,7 +86,7 @@ export const postNewDog = (payload) => {
     }
 }
 
-// gets all the temperaments and orders them
+// gets all the temperaments and orders them.
 export const filteredDogsTemperaments = (dogs) =>{
     let arrayTemperaments= [];
     let idTemperaments=[];

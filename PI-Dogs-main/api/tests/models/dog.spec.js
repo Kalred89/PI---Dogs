@@ -16,12 +16,12 @@ describe('Dog model', () => {
           .catch(() => done());
       });
       it('should work when its a valid name', () => {
-        Dog.create({ name: 'Pug' });
+        Dog.create({ name: 1 });
       });
     });
 
     describe('id', () =>{
-      if('Should automatically generate an id for each dog', () => {
+      it('Should automatically generate an id for each dog', () => {
         Dog.create({ id: '' });
       });
     });
