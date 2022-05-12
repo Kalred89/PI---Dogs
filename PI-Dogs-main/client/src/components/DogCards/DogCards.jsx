@@ -146,7 +146,7 @@ export default function DogCards() {
         selectDogRef.current.value= "noBreed";
         selectSort.current.value='NoSort';      
     }
-    console.log(dogs);
+    // console.log(dogs);
     // console.log(currentDogs);
     // console.log(showDogs);
     return (

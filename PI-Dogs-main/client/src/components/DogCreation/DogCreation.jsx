@@ -81,7 +81,7 @@ export default function DogCreation (){
         input.height = `${input.heightMin} - ${input.heightMax}` ;
         input.weight = `${input.weightMin} - ${input.weightMax}` ;
         if(!Object.keys(errors).length && input.name !== ""){
-            console.log(input);
+            // console.log(input);
             postNewDog(input)
             setInput({
                 name: '',
