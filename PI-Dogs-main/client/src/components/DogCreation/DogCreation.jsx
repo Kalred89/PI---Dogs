@@ -3,8 +3,9 @@ import { Link } from "react-router-dom";
 // import { useHistory } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { postNewDog, getAllTemperaments, getAllDogs } from "../../Slice/docSlice";
+import { getAllTemperaments, getAllDogs } from "../../Slice/docSlice";
 import '../DogCreation/dogcreation.css'
+import axios from "axios";
 
 // Validations for the creation form
 export function validate (input, dogs){
@@ -46,6 +47,11 @@ export function validate (input, dogs){
     return errors;
 }
 
+// Send the info to the back for the creation of the new dog
+const postNewDog = async (payload) => {
+    await axios.post(`http://localhost:3001/dog`, payload)
+}
+
 export default function DogCreation (){
     const dispatch = useDispatch();
     // const history = useHistory();
@@ -75,7 +81,8 @@ export default function DogCreation (){
         input.height = `${input.heightMin} - ${input.heightMax}` ;
         input.weight = `${input.weightMin} - ${input.weightMax}` ;
         if(!Object.keys(errors).length && input.name !== ""){
-            dispatch(postNewDog(input));
+            console.log(input);
+            postNewDog(input)
             setInput({
                 name: '',
                 height: '',
@@ -143,8 +150,7 @@ export default function DogCreation (){
             ...input, temperament: input.temperament.filter(t => t !== temp)
         });
     }
-    // console.log(input);
-    // console.log(dogs.length);
+
     return (
         <div className="create-form">
             <h1>Complete the form below to create your own new dog breed!</h1>

@@ -59,3 +59,8 @@
     background-color: #1829e3;
     color: white;
 }
+
+.dogDetail .loading{
+    display: flex;
+    justify-content: center;
+}

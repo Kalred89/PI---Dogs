@@ -73,7 +73,8 @@ router.get('/dogs', async (req, res,next) => {
             const listDogsApi = await middleware.getDogs();
             const listDogsDB = await middleware.getDogsDB();
             const allDogs = listDogsApi.concat(listDogsDB);
-            return res.status(201).json(allDogs)
+            const allDogsOrdered = allDogs.sort((a, b) => a.name.localeCompare(b.name))
+            return res.status(201).json(allDogsOrdered)
         }catch(err){
             next(err);
         }

@@ -1,23 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {Link} from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import {getDogDetails} from '../../Slice/docSlice';
 import defaultDog from '../../Multimedia/defaultDog.png'
 import './dogdetail.css'
+import axios from 'axios';
+import spinner from '../../Multimedia/spinner.gif'
 
 export default function Details (props){
-    const dispatch = useDispatch();
+    const [dogDetails, setDogDetails]  = useState([]);
+
+    const getDogDetails = async () => {
+        const getDog = await axios.get(`http://localhost:3001/dogs/${props.match.params.id}`)
+        setDogDetails(getDog.data)
+    }
 
     useEffect(()=>{
-        dispatch(getDogDetails(props.match.params.id));
-    },[dispatch, props.match.params.id])
-
-    const { dogDetails }  = useSelector((state) => state.dogsSlice);
-
+        getDogDetails();
+    },[]) 
+    
     return (
         <div className='dogDetail'>
-            {dogDetails
+            {dogDetails.id
             ?<div key={dogDetails.id} className='Card'>
                 <h2>{dogDetails.name}</h2>
                 <img src={dogDetails.image ? dogDetails.image : defaultDog} alt={dogDetails.name} width='350px' height='350px' className='Image'/>
@@ -31,7 +34,7 @@ export default function Details (props){
                     <p><strong>Temperament: </strong>  {dogDetails.temperament ? dogDetails.temperament : dogDetails.temperaments?.map(t => t.name).join(' , ')}</p>
                 </div>
             </div>
-            :  <p>Loading...</p>     
+            :  <div className='loading'><img src={spinner} alt='LoadingImage' width='250px' height='250px' /> </div>   
             }
             <Link to='/home'><button className='back'>◀ Go back</button></Link>
         </div>

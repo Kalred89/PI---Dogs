@@ -10,7 +10,7 @@ import defaultDog from '../../Multimedia/defaultDog.png'
 
 export default function DogCards() {
     // Initial states and local states for filters
-    const { dogs, temperaments,  } = useSelector((state) => state.dogsSlice);
+    const { dogs, temperaments } = useSelector((state) => state.dogsSlice);
     const [filteredDogs, setFilteredDogs] = useState([]);
     const [filteredSubmit, setFilteredSubmit]  = useState([1]);
     const inputRef= useRef();
@@ -18,7 +18,7 @@ export default function DogCards() {
     const selectDogRef= useRef();
     const selectSort = useRef();
     const dispatch = useDispatch();
-    const showDogs = filteredDogs.length ? filteredDogs : dogs
+    const showDogs = filteredDogs.length ? filteredDogs : dogs;
     const showTemps = !filteredDogs.length ? temperaments : filteredDogsTemperaments(filteredDogs);
     // Local states for pagination 
     const [currentPage, setCurrentPage] = useState(1);
@@ -48,12 +48,14 @@ export default function DogCards() {
     // Handles de select search of temperaments
     function handleTemperament(e){
         if (!filteredDogs.length){
-            let filtered = dogs.filter( (dog) => dog.temperament?.includes(e.target.value))
-            setFilteredDogs(filtered); 
+            let filteredTempsApi = dogs.filter( (dog) => dog.temperament?.includes(e.target.value))
+            let filteredTempsDB = dogs.filter( (dog) => dog.temperaments?.find(temp => temp.name === e.target.value))    
+            setFilteredDogs(filteredTempsApi.concat(filteredTempsDB)); 
         } 
         else {
             setFilteredDogs(prev=> prev?.filter ( (dog) => dog.temperament?.includes(e.target.value)))
         }
+        selectRef.current.value = e.target.value;
         setCurrentPage(1);  
     }
     // Handles the sorting options
@@ -144,7 +146,7 @@ export default function DogCards() {
         selectDogRef.current.value= "noBreed";
         selectSort.current.value='NoSort';      
     }
-    // console.log(dogs);
+    console.log(dogs);
     // console.log(currentDogs);
     // console.log(showDogs);
     return (
@@ -156,8 +158,8 @@ export default function DogCards() {
             <select name="Temperaments" id="Temperaments" onChange={e => handleTemperament(e)} ref={selectRef}>
                 <option key={0} value="noTemp">Select a temperament...</option>
                 {
-                    showTemps?.map(temp =>
-                        <option key={temp.name.trim()} value={temp.name.trim()}>{temp.name}</option>
+                    showTemps?.map((temp, i) =>
+                        <option key={i} value={temp.name.trim()}>{temp.name}</option>
                     )
                 
                 }
@@ -166,7 +168,7 @@ export default function DogCards() {
             <label>Filter by breed: </label>
             <select name="Breeds" id="Breeds" onChange={e => handleSubmit(e)} ref={selectDogRef}>
                 <option key={0} value="noBreed">Select a breed...</option>
-                {
+                {   
                     showDogs?.map(dog =>
                         <option key={dog.id} value={dog.name}>{dog.name}</option>
                     )

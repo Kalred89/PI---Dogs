@@ -3,10 +3,8 @@ import axios from 'axios';
 
 const initialState = {
     dogs: [],
-    dogDetails: [],
     temperaments: [],
 }
-
 // sets the states
 export const dogsSlice = createSlice({
     name: 'dogs',
@@ -19,22 +17,12 @@ export const dogsSlice = createSlice({
 
         setTemperamentsList:(state, action) => {
             state.temperaments = action.payload;
-        },
-        
-        setDogDetails: (state, action) => {
-            state.dogDetails = action.payload;
-        },
-
-        setNewDog:(state, action) => {
-            // state.dogs = action.payload;
-            return {...state, dogs: [...state.dogs, action.payload] }
-        }
-        
+        },      
     },
 })
 
 // Action creators are generated for each case reducer function
-export const { setDogsList, setTemperamentsList, setDogDetails, setNewDog } = dogsSlice.actions
+export const { setDogsList, setTemperamentsList } = dogsSlice.actions
 
 export default dogsSlice.reducer
 
@@ -57,30 +45,6 @@ export const getAllTemperaments = () => {
             .get('http://localhost:3001/temperament')
             .then(response => {
                 dispatch(setTemperamentsList(response.data));
-            })
-            .catch(error => console.log(error))
-    }
-}
-
-// gets the details of an specific dog from the back.
-export const getDogDetails = (id) => {
-    return (dispatch) =>{
-        axios
-            .get(`http://localhost:3001/dogs/${id}`)
-            .then(response => {
-                dispatch(setDogDetails(response.data));
-            })
-            .catch(error => console.log(error))
-    }
-}
-
-// posts a new dog.
-export const postNewDog = (payload) => {
-    return (dispatch) =>{
-        axios
-            .post(`http://localhost:3001/dog`, payload)
-            .then(response => {
-                dispatch(setNewDog(response.data));
             })
             .catch(error => console.log(error))
     }
