@@ -147,7 +147,6 @@ export default function DogCards() {
         selectSort.current.value='NoSort';      
     }
     // console.log(dogs);
-    // console.log(currentDogs);
     // console.log(showDogs);
     return (
         <div className="dogCards">

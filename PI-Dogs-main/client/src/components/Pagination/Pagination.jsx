@@ -4,12 +4,10 @@ import './pagination.css'
 export default function Pagination ({currentPage, dogsPerPage, showDogs, pagination}){
     const pageNumbers = [];
 
-    for(let i = 0; i <= Math.floor(showDogs/dogsPerPage); i++){
-        pageNumbers.push(i+1);
+    for(let i = 1; i <= Math.ceil(showDogs/dogsPerPage); i++){
+        pageNumbers.push(i);
     }
-
     // console.log(currentPage);
-
     return (
         <nav className='component-pagination'>
             <ul>
