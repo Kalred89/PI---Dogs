@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-// import { useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllTemperaments, getAllDogs } from "../../Slice/docSlice";
@@ -17,27 +17,27 @@ export function validate (input, dogs){
         errors.name = 'There already exists this dog breed. The dog breed has to be unique'
     }
 
-    if(!input.heightMin || !input.heightMax){
+    if(input.heightMin === '' || input.heightMax === ''){
         errors.height = 'Min & Max are both required'
-    }else if(!typeof input.heightMin === 'number' || !typeof input.heightMax === 'number'){
-        errors.height = 'Min & Max both have to be numbers'
+    } if(!/^[0-9]+$/.test(input.heightMin) || !/^[0-9]+$/.test(input.heightMax)){  
+        errors.height = 'Min & Max both have to be numbers'  
     }else if(input.heightMin < 1 || input.heightMax < 1){
         errors.height = 'Min & Max both have to be greater than 0'
     }
 
-    if(!input.weightMin || !input.weightMax){
+    if(input.weightMin === '' || input.weightMax === ''){
         errors.weight = 'Min & Max are both required'
-    }else if(!typeof input.weightMin === 'number' || !typeof input.weightMax === 'number'){
+    } if(!/^[0-9]+$/.test(input.weightMin) || !/^[0-9]+$/.test(input.weightMax)){
         errors.weight = 'Min & Max have to be numbers'
-    }else if(input.weightMin <= 0 || input.weightMax <= 0){
+    }else if(input.weightMin < 1 || input.weightMax < 1){
         errors.weight = 'Min & Max both have to be greater than 0'
     }
 
-    if(!input.life_span){
+    if(input.life_span === ''){
         errors.life_span = 'Life expectancy is required'
-    }else if(!typeof input.life_span === 'number'){
+    } if(!/^[0-9]+$/.test(input.life_span)){
         errors.life_span = 'Life expectancy has to be a number'
-    }else if(input.life_span <= 0){
+    }else if(input.life_span < 1){
         errors.life_span = 'Life expectancy has to be greater than 0'
     }
 
@@ -54,7 +54,7 @@ const postNewDog = async (payload) => {
 
 export default function DogCreation (){
     const dispatch = useDispatch();
-    // const history = useHistory();
+    const history = useHistory();
     const selectRef= useRef();
     const { dogs, temperaments } = useSelector((state) => state.dogsSlice);
     const [input, setInput] = useState({
@@ -80,7 +80,7 @@ export default function DogCreation (){
         e.preventDefault();
         input.height = `${input.heightMin} - ${input.heightMax}` ;
         input.weight = `${input.weightMin} - ${input.weightMax}` ;
-        if(!Object.keys(errors).length && input.name !== ""){
+        if(!Object.keys(errors).length && ( input.name !== '' || input.heightMin !== '' | input.heightMax !== '' | input.weightMin !== '' | input.weightMax !== '' | input.life_span !== '' | input.temperament.length !== 0)){
             // console.log(input);
             postNewDog(input)
             setInput({
@@ -110,7 +110,7 @@ export default function DogCreation (){
             selectRef.current.value = 0;
             dispatch(getAllDogs());
             window.alert('Dog created successfully')
-            // history.push('/home');
+            history.push('/home');
         }else{
             window.alert('Please, complete the mandatory fields correctly')
         }
