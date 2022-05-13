@@ -21,16 +21,20 @@ export function validate (input, dogs){
         errors.height = 'Min & Max are both required'
     } if(!/^[0-9]+$/.test(input.heightMin) || !/^[0-9]+$/.test(input.heightMax)){  
         errors.height = 'Min & Max both have to be numbers'  
-    }else if(input.heightMin < 1 || input.heightMax < 1){
+    } if(input.heightMin < 1 || input.heightMax < 1){
         errors.height = 'Min & Max both have to be greater than 0'
+    }else if (input.heightMin > input.heightMax){
+        errors.height = 'Minimum height can not be greater than maximun height'
     }
 
     if(input.weightMin === '' || input.weightMax === ''){
         errors.weight = 'Min & Max are both required'
     } if(!/^[0-9]+$/.test(input.weightMin) || !/^[0-9]+$/.test(input.weightMax)){
         errors.weight = 'Min & Max have to be numbers'
-    }else if(input.weightMin < 1 || input.weightMax < 1){
+    } if(input.weightMin < 1 || input.weightMax < 1){
         errors.weight = 'Min & Max both have to be greater than 0'
+    }else if (input.weightMin > input.weightMax){
+        errors.weight = 'Minimum weight can not be greater than maximun weight'
     }
 
     if(input.life_span === ''){
