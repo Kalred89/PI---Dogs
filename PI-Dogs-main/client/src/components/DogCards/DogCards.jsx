@@ -144,9 +144,11 @@ export default function DogCards() {
         inputRef.current.value = "";
         selectRef.current.value = "noTemp";
         selectDogRef.current.value= "noBreed";
-        selectSort.current.value='NoSort';      
+        selectSort.current.value='NoSort'; 
+        setFilteredSubmit(1)     
     }
     // console.log(dogs);
+    // console.log(currentDogs);
     // console.log(showDogs);
     return (
         <div className="dogCards">
